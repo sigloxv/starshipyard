@@ -42,14 +42,15 @@ func ParseProcess() Process {
 //[ Method for process ]///////////////////////////////////////////////////////
 func (self *Process) WritePid(path string) error {
 	pidFile, err := pid.Write(path)
+	if err != nil {
+		fmt.Println("[fatal error] failed to write pid:", err)
+		os.Exit(1)
+	}
+	self.PidFile = pidFile
+	fmt.Println("pidFile returned")
 	fmt.Println("pidFile pid:", pidFile.Pid)
 	fmt.Println("pidFile path:", pidFile.Path)
-	if err != nil {
-		return err
-	} else {
-		self.PidFile = pidFile
-		return nil
-	}
+	return nil
 }
 
 func (self *Process) CleanPid() error {

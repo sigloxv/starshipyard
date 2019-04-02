@@ -101,6 +101,9 @@ func Init(config *config.Config) *Application {
 	fmt.Println("attempting to ProcessWritePid with:", app.Config.Pid)
 	app.Process.WritePid(app.Config.Pid)
 
+	fmt.Println("app.Process.Path in init:", app.Process.PidFile.Path)
+	fmt.Println("app.Process.Pid in init:", app.Process.PidFile.Pid)
+
 	app.ParseApplicationDirectories()
 	//app.ParseUserDirectories()
 	app.Process = service.ParseProcess()
