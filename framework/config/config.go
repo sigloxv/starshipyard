@@ -35,17 +35,21 @@ func (self Environment) String() string {
 
 // TODO: Not a fan of local de
 type Config struct {
-	AppName          string   `yaml:"name"`
-	Description      string   `yaml:"description"`
-	Keywords         []string `yaml:"keywords"`
-	MaintainanceMode bool     `yaml:"maintainance"`
-	Announcement     string   `yaml:"announcement"`
-	SessionsDisabled bool     `yaml:"sessions"`
-	Environment      string   `yaml:"environment"`
-	Pid              string   `yaml:"pid"`
-	Address          string   `yaml:"address"`
-	Port             int      `yaml:"port"`
-	Debug            bool     `yaml:"debug"`
+	AppName            string   `yaml:"name"`
+	Description        string   `yaml:"description"`
+	Keywords           []string `yaml:"keywords"`
+	MaintainanceMode   bool     `yaml:"maintainance"`
+	Announcement       string   `yaml:"announcement"`
+	SessionsDisabled   bool     `yaml:"sessions"`
+	Environment        string   `yaml:"environment"`
+	ConfigDirectory    string   `yaml:"config"`
+	TemporaryDirectory string   `yaml:"temp"`
+	DataDirectory      string   `yaml:"data"`
+	CacheDirectory     string   `yaml:"cache"`
+	Pid                string   `yaml:"pid"`
+	Address            string   `yaml:"address"`
+	Port               int      `yaml:"port"`
+	Debug              bool     `yaml:"debug"`
 }
 
 func LoadConfig(path string) (config *Config, err error) {

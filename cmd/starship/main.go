@@ -59,7 +59,13 @@ func main() {
 							config = framework.DefaultConfig()
 						}
 						s := framework.Init(config)
-						s.StartAsDaemon()
+
+						if c.Bool("daemon") {
+							fmt.Println("[starship] launching in daemon mode...")
+							s.StartAsDaemon()
+						} else {
+							s.Start()
+						}
 						return nil
 					},
 				},

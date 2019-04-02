@@ -42,6 +42,8 @@ func ParseProcess() Process {
 //[ Method for process ]///////////////////////////////////////////////////////
 func (self *Process) WritePid(path string) error {
 	pidFile, err := pid.Write(path)
+	fmt.Println("pidFile pid:", pidFile.Pid)
+	fmt.Println("pidFile path:", pidFile.Path)
 	if err != nil {
 		return err
 	} else {
