@@ -1,0 +1,7 @@
+[submodule "framework/service/signal"]
+	path = framework/service/signal
+  url = https://github.com/multiverse-os/signal
+
+[submodule "framework/service/pid"]
+	path = framework/service/pid
+  url = https://github.com/multiverse-os/pid

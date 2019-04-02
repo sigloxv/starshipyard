@@ -1,0 +1,22 @@
+# Development Helpers
+rails-example
+
+# Runtime Artifacts
+tmp/pids/*.pid
+
+# Compiling Artifacts
+cmd/starshipyard/starshipyard
+
+# Private Developer Notes
+development.notes.md
+
+# Library storage
+potential-libs
+
+# Datbase Files
+kv.db
+*.db
+
+# Text Editing Artificats
+*.swp
+*.swo
