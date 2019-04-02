@@ -122,8 +122,7 @@ func main() {
 			Aliases: []string{"c"},
 			Usage:   "Start the starship yard console interface",
 			Action: func(c *cli.Context) error {
-				fmt.Println("[starship] console interface is not implemented yet, it will be a custom console likey not as advanced as")
-				fmt.Println("[starship] the rails console with using ishell or a fork of it most likely")
+				fmt.Println("[starship][CONSOLE] console interface is not implemented yes")
 				return nil
 			},
 		},
