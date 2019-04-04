@@ -56,6 +56,7 @@ func main() {
 						config, err := framework.LoadConfig("config/app.yaml")
 						if err != nil {
 							fmt.Println("[starship] missing 'config/app.yaml' starship app configuration")
+							// TODO: Should write this default config to config/app.yaml
 							config = framework.DefaultConfig()
 						}
 						s := framework.Init(config)

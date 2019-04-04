@@ -51,8 +51,10 @@ type Application struct {
 	UserDataDirectory   string
 }
 
-// TODO: Want to use function chaning when initializing the server so that
-// routes can be passed in
+func Reseed() {
+	rand.Seed(time.Now().UTC().UnixNano())
+}
+
 func Init(config *config.Config) *Application {
 	// TODO: Need to validate the values coming in, we need to ensure that values
 	// that absolutey can not be nil like pid have defaults to fallback on
@@ -96,7 +98,7 @@ func Init(config *config.Config) *Application {
 
 	app.Process.Signals = service.OnShutdownSignals(func(s os.Signal) {
 		fmt.Println("[starship] received exit signal:", s)
-		app.Stop()
+		app.Stop() // NOTE: Stop has a call to CleanUp()
 	})
 
 	app.Process.WritePid(app.Config.Pid)
