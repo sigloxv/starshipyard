@@ -14,8 +14,8 @@ development.notes.md
 potential-libs
 
 # Datbase Files
-kv.db
 *.db
+db/*.db
 
 # Text Editing Artificats
 *.swp

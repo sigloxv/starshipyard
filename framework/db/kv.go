@@ -12,8 +12,8 @@ type KV struct {
 }
 
 // TODO: should move router definition to a route.go file
-func InitKV() *KV {
-	store, err := kvstore.New("kv.db")
+func InitKV(path string) *KV {
+	store, err := kvstore.New(path)
 	if err != nil {
 		panic(fmt.Sprintf("[fatal error] failed to open session DB: %v", err))
 	}

@@ -43,8 +43,10 @@ func New(config *config.Config) *Server {
 }
 
 // TODO: Split into logged in and not logged in sessions? Separate out sessions by roles?
+// TODO: Migrate to using the higher level API for kvstore that is used by the
+// framework.go file in the Init() func
 func (self *Server) LoadSessionStore() {
-	store, err := kvstore.New("sessions.db")
+	store, err := kvstore.New("db/sessions.db")
 	if err != nil {
 		panic(fmt.Sprintf("[fatal error] failed to open session DB: %v", err))
 	}

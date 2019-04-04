@@ -16,7 +16,6 @@ func (self *Application) Start() {
 	// way of holding the application open
 	for {
 	}
-	fmt.Println("its not holding things open :(")
 }
 
 func (self *Application) Stop() {

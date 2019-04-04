@@ -56,8 +56,6 @@ func Reseed() {
 }
 
 func Init(config *config.Config) *Application {
-	// TODO: Need to validate the values coming in, we need to ensure that values
-	// that absolutey can not be nil like pid have defaults to fallback on
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	if service.IsRootUser() {
@@ -91,7 +89,7 @@ func Init(config *config.Config) *Application {
 		Config:           config,
 		WorkingDirectory: wd,
 		HTTPServer:       server.New(config),
-		KV:               db.InitKV(),
+		KV:               db.InitKV("db/kv.db"),
 		ScrambleKey:      scramble.GenerateKey(),
 		Process:          service.ParseProcess(),
 	}
@@ -110,9 +108,9 @@ func Init(config *config.Config) *Application {
 }
 
 func (self *Application) CleanUp() error {
+	fmt.Println("[starship] attempting to exit cleanly...")
 	fmt.Println("[starship] shutting down http server and closing session store")
 	self.HTTPServer.Stop()
-	fmt.Println("[starship] attempting to exit cleanly...")
 	fmt.Println("[starship] closing the general key/value store")
 	self.KV.Store.Close()
 	fmt.Println("[starship] cleaning the pid file")

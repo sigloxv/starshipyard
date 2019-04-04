@@ -33,11 +33,11 @@ func main() {
 			Usage:  "Specify the listening port for the HTTP server",
 			EnvVar: "STARSHIP_ADDRESS",
 		},
-		//cli.BoolFlag{
-		//	Name:   "daemon, d",
-		//	Usage:  "Daemonize the http server",
-		//	EnvVar: "STARSHIP_ADDRESS",
-		//},
+		cli.BoolFlag{
+			Name:   "daemon, d",
+			Usage:  "Daemonize the http server",
+			EnvVar: "STARSHIP_ADDRESS",
+		},
 	}
 	cmd.Commands = []cli.Command{
 		{
@@ -72,67 +72,67 @@ func main() {
 				},
 			},
 		},
-		//{
-		//	Name:    "generate",
-		//	Aliases: []string{"g"},
-		//	Usage:   "Generate new go source code for models, controllers, and views",
-		//	Subcommands: []cli.Command{
-		//		{
-		//			Name:  "model",
-		//			Usage: "Build a model template with the specified object data",
-		//			Action: func(c *cli.Context) error {
-		//				fmt.Println("[starship] code generation functionality is not implemented yet")
-		//				fmt.Println("[starship] test code has been built, it just needs to be migrated into the base and will be available shortly")
-		//				return nil
-		//			},
-		//		},
-		//		{
-		//			Name:  "controller",
-		//			Usage: "Build a controller template with the specified object data",
-		//			Action: func(c *cli.Context) error {
-		//				fmt.Println("[starship] code generation functionality is not implemented yet")
-		//				fmt.Println("[starship] test code has been built, it just needs to be migrated into the base and will be available shortly")
-		//				return nil
-		//			},
-		//		},
-		//		{
-		//			Name:  "view",
-		//			Usage: "Build a view template with the specified object data",
-		//			Action: func(c *cli.Context) error {
-		//				fmt.Println("[starship] code generation functionality is not implemented yet")
-		//				fmt.Println("[starship] test code has been built, it just needs to be migrated into the base and will be available shortly")
-		//				return nil
-		//			},
-		//		},
-		//		{
-		//			Name:  "job",
-		//			Usage: "Build a job template with the specified object data",
-		//			Action: func(c *cli.Context) error {
-		//				fmt.Println("[starship] code generation functionality is not implemented yet")
-		//				fmt.Println("[starship] test code has been built, it just needs to be migrated into the base and will be available shortly")
-		//				return nil
-		//			},
-		//		},
-		//		{
-		//			Name:  "model",
-		//			Usage: "Build a model template with the specified object data",
-		//			Action: func(c *cli.Context) error {
-		//				fmt.Println("[starship] code generation functionality is not implemented yet")
-		//				fmt.Println("[starship] test code has been built, it just needs to be migrated into the base and will be available shortly")
-		//				return nil
-		//			},
-		//		},
-		//	},
-		//},
-		//{
-		//	Name:    "console",
-		//	Aliases: []string{"c"},
-		//	Usage:   "Start the starship yard console interface",
-		//	Action: func(c *cli.Context) error {
-		//		fmt.Println("[starship][CONSOLE] console interface is not implemented yes")
-		//		return nil
-		//	},
-		//},
+		{
+			Name:    "generate",
+			Aliases: []string{"g"},
+			Usage:   "Generate new go source code for models, controllers, and views",
+			Subcommands: []cli.Command{
+				{
+					Name:  "model",
+					Usage: "Build a model template with the specified object data",
+					Action: func(c *cli.Context) error {
+						fmt.Println("[starship] code generation functionality is not implemented yet")
+						fmt.Println("[starship] test code has been built, it just needs to be migrated into the base and will be available shortly")
+						return nil
+					},
+				},
+				{
+					Name:  "controller",
+					Usage: "Build a controller template with the specified object data",
+					Action: func(c *cli.Context) error {
+						fmt.Println("[starship] code generation functionality is not implemented yet")
+						fmt.Println("[starship] test code has been built, it just needs to be migrated into the base and will be available shortly")
+						return nil
+					},
+				},
+				{
+					Name:  "view",
+					Usage: "Build a view template with the specified object data",
+					Action: func(c *cli.Context) error {
+						fmt.Println("[starship] code generation functionality is not implemented yet")
+						fmt.Println("[starship] test code has been built, it just needs to be migrated into the base and will be available shortly")
+						return nil
+					},
+				},
+				{
+					Name:  "job",
+					Usage: "Build a job template with the specified object data",
+					Action: func(c *cli.Context) error {
+						fmt.Println("[starship] code generation functionality is not implemented yet")
+						fmt.Println("[starship] test code has been built, it just needs to be migrated into the base and will be available shortly")
+						return nil
+					},
+				},
+				{
+					Name:  "model",
+					Usage: "Build a model template with the specified object data",
+					Action: func(c *cli.Context) error {
+						fmt.Println("[starship] code generation functionality is not implemented yet")
+						fmt.Println("[starship] test code has been built, it just needs to be migrated into the base and will be available shortly")
+						return nil
+					},
+				},
+			},
+		},
+		{
+			Name:    "console",
+			Aliases: []string{"c"},
+			Usage:   "Start the starship yard console interface",
+			Action: func(c *cli.Context) error {
+				fmt.Println("[starship][CONSOLE] console interface is not implemented yes")
+				return nil
+			},
+		},
 	}
 	err := cmd.Run(os.Args)
 	if err != nil {
