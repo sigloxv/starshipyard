@@ -19,8 +19,10 @@ func (self *Application) Start() {
 }
 
 func (self *Application) Stop() {
-	fmt.Println("[shipyard] initiating the stop sequence")
-	self.CleanUp()
+	fmt.Println("[shipyard] initiating cleanup sequence, and stopping the starship process")
+	self.HTTPServer.Stop()
+	self.KV.Store.Close()
+	self.Process.CleanPid()
 	os.Exit(0)
 }
 

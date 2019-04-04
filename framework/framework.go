@@ -95,25 +95,18 @@ func Init(config *config.Config) *Application {
 	}
 
 	app.Process.Signals = service.OnShutdownSignals(func(s os.Signal) {
+		if s.String() == "interrupt" {
+			fmt.Printf("\n")
+		}
 		fmt.Println("[starship] received exit signal:", s)
-		app.Stop() // NOTE: Stop has a call to CleanUp()
+		app.Stop()
 	})
 
+	fmt.Println("Writing pid:", app.Config.Pid)
 	app.Process.WritePid(app.Config.Pid)
 	app.ParseApplicationDirectories()
 	//app.ParseUserDirectories()
 
 	app.KV.NewCollection("users")
 	return app
-}
-
-func (self *Application) CleanUp() error {
-	fmt.Println("[starship] attempting to exit cleanly...")
-	fmt.Println("[starship] shutting down http server and closing session store")
-	self.HTTPServer.Stop()
-	fmt.Println("[starship] closing the general key/value store")
-	self.KV.Store.Close()
-	fmt.Println("[starship] cleaning the pid file")
-	self.Process.CleanPid()
-	return nil
 }

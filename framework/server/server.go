@@ -67,7 +67,7 @@ func (self *Server) Start() {
 	//self.LoadTemplates()
 	//self.LoadRoutes()
 	self.HTTP = &http.Server{Addr: self.ListenAt(), Handler: self.Router}
-	fmt.Println("[starship] http server listening on [ " + self.ListenAt() + " ] and daemonizing...")
+	fmt.Println("[starship] http server listening on [ " + self.ListenAt() + " ]")
 	self.HTTP.ListenAndServe()
 }
 

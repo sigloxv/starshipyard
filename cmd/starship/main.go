@@ -23,20 +23,13 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:   "address, a",
-			Value:  "localhost",
 			Usage:  "Specify the address for the HTTP server to listen",
 			EnvVar: "STARSHIP_ADDRESS",
 		},
 		cli.StringFlag{
 			Name:   "port, p",
-			Value:  "8080",
 			Usage:  "Specify the listening port for the HTTP server",
-			EnvVar: "STARSHIP_ADDRESS",
-		},
-		cli.BoolFlag{
-			Name:   "daemon, d",
-			Usage:  "Daemonize the http server",
-			EnvVar: "STARSHIP_ADDRESS",
+			EnvVar: "STARSHIP_PORT",
 		},
 	}
 	cmd.Commands = []cli.Command{
@@ -48,6 +41,12 @@ func main() {
 				{
 					Name:  "start",
 					Usage: "Start the starship yard http server",
+					Flags: []cli.Flag{
+						cli.BoolFlag{
+							Name:  "daemon, d",
+							Usage: "Daemonize the http server",
+						},
+					},
 					Action: func(c *cli.Context) error {
 						// TODO: Use flags to get port and host address and environment to
 						// start the server in or use envirnonemtnal variables. We take
@@ -59,14 +58,26 @@ func main() {
 							// TODO: Should write this default config to config/app.yaml
 							config = framework.DefaultConfig()
 						}
+						// TODO: Should validate address is sane
+						if len(c.String("address")) != 0 {
+							config.Address = c.String("address")
+						}
+						if c.Int("port") != 0 {
+							// TODO: Should validate for sane value, as in must be between
+							// valid range of ports, for 80 and 443 will need to add
+							// capabilities to the binary or run as root and drop priviledges
+							// liked done by nginx
+							config.Port = c.Int("port")
+						}
+
 						s := framework.Init(config)
 
-						//if c.Bool("daemon") {
-						//	fmt.Println("[starship] launching in daemon mode...")
-						//	s.StartAsDaemon()
-						//} else {
-						s.Start()
-						//}
+						if c.Bool("daemon") {
+							fmt.Println("[starship] launching in daemon mode...")
+							s.StartAsDaemon()
+						} else {
+							s.Start()
+						}
 						return nil
 					},
 				},
