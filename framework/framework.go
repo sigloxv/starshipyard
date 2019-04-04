@@ -51,12 +51,12 @@ type Application struct {
 	UserDataDirectory   string
 }
 
-func Reseed() {
+func seedRandom() {
 	rand.Seed(time.Now().UTC().UnixNano())
 }
 
 func Init(config *config.Config) *Application {
-	rand.Seed(time.Now().UTC().UnixNano())
+	seedRandom()
 
 	if service.IsRootUser() {
 		fmt.Println("[starship] running internet facing servers as root is very dangerous, run as an unpriviledged user")

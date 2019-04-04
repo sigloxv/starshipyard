@@ -1,7 +1,6 @@
 package signals
 
 import (
-	"fmt"
 	"os"
 	"os/signal"
 	"sync"
@@ -24,9 +23,6 @@ func NewHandler() Handler {
 		mutex:   &sync.Mutex{},
 		channel: make(chan os.Signal, 1),
 	}
-	// TODO: THIS IS BEING CALLED TOO EARLY. THIS HAS TO BE CALLED AFTER SACING
-	// THE HANDLER (porobasbly)
-	fmt.Println("setting up signal handler")
 	go func() {
 		for {
 			incomingSignal := <-handler.channel
@@ -71,7 +67,7 @@ func (self Handler) OnHangup(function func(os.Signal)) Handler { return self.Add
 func (self Handler) OnKill(function func(os.Signal)) Handler   { return self.Add(function, Kill) }
 
 ///////////////////////////////////////////////////////////////////////////////
-// TODO: Would be nice to eventually build in functionality to turly ignore
+// TODO: Would be nice to eventually build in functionality to truly ignore
 // signals even force kill signals; possibly via uninterruptable sleep or some
 // similar technique to make this a truly general use signal handling library
 func (self Handler) Ignore(signals ...os.Signal) Handler {
