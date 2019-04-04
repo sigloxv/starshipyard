@@ -12,16 +12,14 @@ func (self *Application) Start() {
 	fmt.Println("[starship] starting the web application http server")
 
 	fmt.Println("app.Process.PidFile in start:", self.Process)
-	for {
-	}
 
 	fmt.Println("app.Process.Path in start:", self.Process.PidFile.Path)
 	fmt.Println("app.Process.Pid in start:", self.Process.PidFile.Pid)
-	//self.HTTPServer.Start()
+	self.HTTPServer.Start()
 	// TODO: Should hold open application until stop is called. Id like a better
 	// way of holding the application open
-	//for {
-	//}
+	for {
+	}
 	fmt.Println("its not holding things open :(")
 }
 

@@ -25,35 +25,37 @@ type Process struct {
 	Signals            signal.Handler
 }
 
-func ParseProcess() Process {
-	executable, err := os.Executable()
-	if err != nil {
+func ParseProcess() *Process {
+	if executable, err := os.Executable(); err != nil {
 		panic(fmt.Sprintf("[fatal error] failed to process executable:", err))
-	}
-	return Process{
-		Pid:        os.Getpid(),
-		UID:        os.Getuid(),
-		GID:        os.Getgid(),
-		Executable: executable,
-		StartedAt:  time.Now(),
+	} else {
+		return &Process{
+			Pid:        os.Getpid(),
+			UID:        os.Getuid(),
+			GID:        os.Getgid(),
+			Executable: executable,
+			StartedAt:  time.Now(),
+		}
 	}
 }
 
 //[ Method for process ]///////////////////////////////////////////////////////
 func (self *Process) WritePid(path string) error {
-	pidFile, err := pid.Write(path)
-	if err != nil {
-		fmt.Println("[fatal error] failed to write pid:", err)
-		os.Exit(1)
+	if pidFile, err := pid.Write(path); err != nil {
+		panic(fmt.Sprintf("[fatal error] failed to write pid:", err))
+	} else {
+		self.PidFile = pidFile
+		fmt.Println("pidFile returned")
+		fmt.Println("pidFile pid:", pidFile.Pid)
+		fmt.Println("pidFile path:", pidFile.Path)
+		return nil
 	}
-	self.PidFile = pidFile
-	fmt.Println("pidFile returned")
-	fmt.Println("pidFile pid:", pidFile.Pid)
-	fmt.Println("pidFile path:", pidFile.Path)
-	return nil
 }
 
 func (self *Process) CleanPid() error {
+	// TODO: Runtime error the 60 call fails insie the function call
+	// because for some reason PidFile is null
+	fmt.Println("process at this point is:", self)
 	return self.PidFile.Clean()
 }
 

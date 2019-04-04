@@ -1,6 +1,7 @@
 package signals
 
 import (
+	"fmt"
 	"os"
 	"os/signal"
 	"sync"
@@ -23,10 +24,16 @@ func NewHandler() Handler {
 		mutex:   &sync.Mutex{},
 		channel: make(chan os.Signal, 1),
 	}
+	// TODO: THIS IS BEING CALLED TOO EARLY. THIS HAS TO BE CALLED AFTER SACING
+	// THE HANDLER (porobasbly)
+	fmt.Println("setting up signal handler")
 	go func() {
 		for {
 			incomingSignal := <-handler.channel
-			handler.handle(incomingSignal)
+			functions := handler.hooks[incomingSignal]
+			for _, function := range functions {
+				function(incomingSignal)
+			}
 		}
 	}()
 	return handler
@@ -35,13 +42,6 @@ func NewHandler() Handler {
 func ShutdownHandler(function func(os.Signal)) Handler {
 	handler := NewHandler()
 	return handler.OnShutdown(function)
-}
-
-func (self Handler) handle(incomingSignal os.Signal) {
-	functions := self.hooks[incomingSignal]
-	for _, function := range functions {
-		function(incomingSignal)
-	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////

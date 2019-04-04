@@ -33,7 +33,7 @@ type Domain struct {
 // information
 type Application struct {
 	Name               string
-	Process            service.Process
+	Process            *service.Process
 	ParentPid          int
 	User               string
 	UID                int
@@ -84,6 +84,7 @@ func Init(config *config.Config) *Application {
 	}
 
 	service.WritePid(config.Pid)
+
 	app := &Application{
 		Config:           config,
 		WorkingDirectory: wd,
@@ -95,7 +96,10 @@ func Init(config *config.Config) *Application {
 
 	app.Process.Signals = service.OnShutdownSignals(func(s os.Signal) {
 		fmt.Println("[starship] received exit signal:", s)
+		app.CleanUp()
 		app.Stop()
+		fmt.Println("[starship] exiting with error code 1")
+		os.Exit(1)
 	})
 
 	fmt.Println("attempting to ProcessWritePid with:", app.Config.Pid)
@@ -106,7 +110,6 @@ func Init(config *config.Config) *Application {
 
 	app.ParseApplicationDirectories()
 	//app.ParseUserDirectories()
-	app.Process = service.ParseProcess()
 	app.KV.NewCollection("users")
 	// TODO: Connect/Initialize/Load databases
 	fmt.Println("application:", app)
@@ -125,45 +128,12 @@ func (self *Application) ParseApplicationDirectories() {
 	}
 }
 
-func (self *Application) ParseUserDirectories() {
-	var err error
-	self.UserHomeDirectory = os.Getenv("HOME")
-	// TODO: Why is this undefined?
-	// REF: https://golang.org/src/os/file.go
-	//self.UserHomeDirectory, err = os.UserHomeDir()
-	//if err != nil {
-	//	panic(fmt.Sprintf("[fatal error] failed to determine user home:", err))
-	//}
-	self.UserCacheDirectory, err = os.UserCacheDir()
-	if err != nil {
-		panic(fmt.Sprintf("[fatal error] failed to determine user cache:", err))
-	}
-
-	self.UserConfigDirectory = self.UserHomeDirectory + "/.config/starship"
-	if err != nil {
-		panic(fmt.Sprintf("[fatal error] failed to determine user config path:", err))
-	}
-	if _, err := os.Stat(self.UserConfigDirectory); os.IsNotExist(err) {
-		os.Mkdir(self.UserConfigDirectory, 0770)
-	}
-
-	self.UserDataDirectory = self.UserHomeDirectory + "/.local/share/starship/"
-	if err != nil {
-		panic(fmt.Sprintf("[fatal error] failed to determine user data path:", err))
-	}
-	if _, err := os.Stat(self.UserDataDirectory); os.IsNotExist(err) {
-		os.Mkdir(self.UserDataDirectory, 0770)
-	}
-}
-
 func (self *Application) CleanUp() error {
 	fmt.Println("[starship] attempting to exit cleanly...")
 	fmt.Println("[starship] closing the general key/value store")
 	self.KV.Store.Close()
 	fmt.Println("[starship] cleaning the pid file")
-	err := self.Process.CleanPid()
-	if err != nil {
-		return err
-	}
+	// TODO: Runtime error bwecause this leads to a null pointer
+	self.Process.CleanPid()
 	return nil
 }
