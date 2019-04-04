@@ -24,8 +24,7 @@ func (self *Application) Start() {
 }
 
 func (self *Application) Stop() {
-	fmt.Println("[shipyard] stopping the web application http server")
-	self.HTTPServer.Stop()
+	fmt.Println("[shipyard] initiating the stop sequence")
 	self.CleanUp()
 	os.Exit(0)
 }

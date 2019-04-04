@@ -96,44 +96,24 @@ func Init(config *config.Config) *Application {
 
 	app.Process.Signals = service.OnShutdownSignals(func(s os.Signal) {
 		fmt.Println("[starship] received exit signal:", s)
-		app.CleanUp()
 		app.Stop()
-		fmt.Println("[starship] exiting with error code 1")
-		os.Exit(1)
 	})
 
-	fmt.Println("attempting to ProcessWritePid with:", app.Config.Pid)
 	app.Process.WritePid(app.Config.Pid)
-
-	fmt.Println("app.Process.Path in init:", app.Process.PidFile.Path)
-	fmt.Println("app.Process.Pid in init:", app.Process.PidFile.Pid)
-
 	app.ParseApplicationDirectories()
 	//app.ParseUserDirectories()
+
 	app.KV.NewCollection("users")
-	// TODO: Connect/Initialize/Load databases
-	fmt.Println("application:", app)
 	return app
 }
 
-func (self *Application) ParseApplicationDirectories() {
-	var err error
-	self.WorkingDirectory, err = os.Getwd()
-	if err != nil {
-		panic(fmt.Sprintf("[fatal error] failed to determine working directory:", err))
-	}
-	self.TemporaryDirectory = os.TempDir()
-	if err != nil {
-		panic(fmt.Sprintf("[fatal error] failed to obtain temporary directory:", err))
-	}
-}
-
 func (self *Application) CleanUp() error {
+	fmt.Println("[starship] shutting down http server and closing session store")
+	self.HTTPServer.Stop()
 	fmt.Println("[starship] attempting to exit cleanly...")
 	fmt.Println("[starship] closing the general key/value store")
 	self.KV.Store.Close()
 	fmt.Println("[starship] cleaning the pid file")
-	// TODO: Runtime error bwecause this leads to a null pointer
 	self.Process.CleanPid()
 	return nil
 }

@@ -58,20 +58,13 @@ func main() {
 							fmt.Println("[starship] missing 'config/app.yaml' starship app configuration")
 							config = framework.DefaultConfig()
 						}
-						fmt.Println("Calling framework.Init(config)")
 						s := framework.Init(config)
-						fmt.Println("framework.Init(config) completed")
 
 						//if c.Bool("daemon") {
 						//	fmt.Println("[starship] launching in daemon mode...")
 						//	s.StartAsDaemon()
 						//} else {
-
-						//fmt.Println("app.Process.Pid:", s.Process.Pid)
-						//fmt.Println("app.Process.Path:", s.Process.Path)
-						fmt.Println("calling framework.Start()")
 						s.Start()
-						fmt.Println("framework.Start() completed")
 						//}
 						return nil
 					},

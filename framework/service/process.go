@@ -45,17 +45,11 @@ func (self *Process) WritePid(path string) error {
 		panic(fmt.Sprintf("[fatal error] failed to write pid:", err))
 	} else {
 		self.PidFile = pidFile
-		fmt.Println("pidFile returned")
-		fmt.Println("pidFile pid:", pidFile.Pid)
-		fmt.Println("pidFile path:", pidFile.Path)
 		return nil
 	}
 }
 
 func (self *Process) CleanPid() error {
-	// TODO: Runtime error the 60 call fails insie the function call
-	// because for some reason PidFile is null
-	fmt.Println("process at this point is:", self)
 	return self.PidFile.Clean()
 }
 

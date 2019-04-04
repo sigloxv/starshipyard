@@ -5,6 +5,18 @@ import (
 	"os"
 )
 
+func (self *Application) ParseApplicationDirectories() {
+	var err error
+	self.WorkingDirectory, err = os.Getwd()
+	if err != nil {
+		panic(fmt.Sprintf("[fatal error] failed to determine working directory:", err))
+	}
+	self.TemporaryDirectory = os.TempDir()
+	if err != nil {
+		panic(fmt.Sprintf("[fatal error] failed to obtain temporary directory:", err))
+	}
+}
+
 func (self *Application) ParseUserDirectories() {
 	var err error
 	self.UserHomeDirectory = os.Getenv("HOME")
