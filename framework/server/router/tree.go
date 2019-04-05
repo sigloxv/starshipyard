@@ -1,9 +1,5 @@
 package router
 
-// Radix tree implementation below is a based on the original work by
-// Armon Dadgar in https://github.com/armon/go-radix/blob/master/radix.go
-// (MIT licensed). It's been heavily modified for use as a HTTP routing tree.
-
 import (
 	"fmt"
 	"math"
@@ -44,8 +40,6 @@ var methodMap = map[string]methodTyp{
 	http.MethodTrace:   mTRACE,
 }
 
-// RegisterMethod adds support for custom HTTP method handlers, available
-// via Router#Method and Router#MethodFunc
 func RegisterMethod(method string) {
 	if method == "" {
 		return
@@ -73,44 +67,21 @@ const (
 )
 
 type node struct {
-	// node type: static, regexp, param, catchAll
-	typ nodeTyp
-
-	// first byte of the prefix
-	label byte
-
-	// first byte of the child prefix
-	tail byte
-
-	// prefix is the common prefix we ignore
-	prefix string
-
-	// regexp matcher for regexp nodes
-	rex *regexp.Regexp
-
-	// HTTP handler endpoints on the leaf node
+	typ       nodeTyp
+	label     byte
+	tail      byte
+	prefix    string
+	rex       *regexp.Regexp
 	endpoints endpoints
-
-	// subroutes on the leaf node
 	subroutes Routes
-
-	// child nodes should be stored in-order for iteration,
-	// in groups of the node type.
-	children [ntCatchAll + 1]nodes
+	children  [ntCatchAll + 1]nodes
 }
 
-// endpoints is a mapping of http method constants to handlers
-// for a given route.
 type endpoints map[methodTyp]*endpoint
 
 type endpoint struct {
-	// endpoint handler
-	handler http.Handler
-
-	// pattern is the routing pattern for handler nodes
-	pattern string
-
-	// parameter keys recorded on handler nodes
+	handler   http.Handler
+	pattern   string
 	paramKeys []string
 }
 
@@ -128,15 +99,11 @@ func (n *node) InsertRoute(method methodTyp, pattern string, handler http.Handle
 	search := pattern
 
 	for {
-		// Handle key exhaustion
 		if len(search) == 0 {
-			// Insert or update the node's leaf handler
 			n.setEndpoint(method, handler, pattern)
 			return n
 		}
 
-		// We're going to be searching for a wild node next,
-		// in this case, we need to get the tail
 		var label = search[0]
 		var segTail byte
 		var segEndIdx int
@@ -165,7 +132,6 @@ func (n *node) InsertRoute(method methodTyp, pattern string, handler http.Handle
 		}
 
 		// Found an edge to match the pattern
-
 		if n.typ > ntStatic {
 			// We found a param node, trim the param from the search path and continue.
 			// This param/wild pattern segment would already be on the tree from a previous

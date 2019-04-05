@@ -11,5 +11,6 @@ import (
 // duplicated, this is fine for a simple interface to 5 subpackages
 
 func Daemonize(function func()) error {
+
 	return daemon.Daemonize(function)
 }

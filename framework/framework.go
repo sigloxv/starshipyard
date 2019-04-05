@@ -32,19 +32,18 @@ type Domain struct {
 // TODO: Build a string function to provide a nice ouput with all necesary
 // information
 type Application struct {
-	Name               string
-	Process            *service.Process
-	ParentPid          int
-	User               string
-	UID                int
-	WorkingDirectory   string
-	DataDirectory      string
-	TemporaryDirectory string
-	Config             *config.Config
-	ScrambleKey        scramble.Key
-	KV                 *db.KV
-	HTTPServer         *server.Server
-
+	Name                string
+	Process             *service.Process
+	ParentPid           int
+	User                string
+	UID                 int
+	WorkingDirectory    string
+	DataDirectory       string
+	TemporaryDirectory  string
+	Config              *config.Config
+	ScrambleKey         scramble.Key
+	KV                  *db.KV
+	HTTPServer          *server.Server
 	UserHomeDirectory   string
 	UserCacheDirectory  string
 	UserConfigDirectory string
@@ -102,11 +101,17 @@ func Init(config *config.Config) *Application {
 		app.Stop()
 	})
 
-	fmt.Println("Writing pid:", app.Config.Pid)
+	fmt.Println("[starship] writing pid:", app.Config.Pid)
 	app.Process.WritePid(app.Config.Pid)
 	app.ParseApplicationDirectories()
 	//app.ParseUserDirectories()
 
 	app.KV.NewCollection("users")
+
+	// TODO: Load controllers, models, etc
+
 	return app
+}
+
+func (self *Application) LoadRoutes() {
 }

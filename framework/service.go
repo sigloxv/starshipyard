@@ -11,6 +11,9 @@ import (
 func (self *Application) StartAsDaemon() { service.Daemonize(func() { self.Start() }) }
 func (self *Application) Start() {
 	fmt.Println("[starship] starting the web application http server")
+
+	// TODO: Shouldw e load the routes from the root/routes.go file and pass it
+	// through the Start() method?
 	self.HTTPServer.Start()
 	// TODO: Should hold open application until stop is called. Id like a better
 	// way of holding the application open

@@ -6,12 +6,13 @@ import (
 	"os"
 	"strings"
 	"syscall"
-
-	pid "github.com/multiverse-os/starshipyard/framework/service/pid"
+	//pid "github.com/multiverse-os/starshipyard/framework/service/pid"
 )
 
 //[ Test Function ]////////////////////////////////////////////////////////////
 func Daemonize(function func()) error {
+	fmt.Println("Daemonizing")
+
 	daemon := Process{LogFile: "/dev/stdout"}
 	if child, err := daemon.Run(); err != nil {
 		return err
@@ -39,7 +40,8 @@ type Process struct {
 	EnvVar
 	EnvVars          map[string]string
 	Initialized      bool
-	PIDFile          string
+	Pid              int
+	PidFile          string
 	LogDirectory     string
 	LogFile          string
 	WorkingDirectory string
@@ -79,10 +81,11 @@ func (self *Process) ParseEnvironment() (env map[string]string) {
 
 func (self *Process) IsRunning() bool {
 	// TODO: Is there really no better way to handle this?
-	return os.Getenv("1") == "_DAEMONIZED"
+	return os.Getenv("_DAEMON") == "1"
 }
 
 func (self *Process) Run() (childProcess *os.Process, err error) {
+	fmt.Println("Run() command")
 	if self.IsRunning() {
 		if err = self.child(); err != nil {
 			return nil, err
@@ -156,7 +159,10 @@ func (self *Process) files() (processFiles []*os.File) {
 	//if self.pidFile != nil {
 	//	f = append(f, self.pidFile.File) // (4) pid file
 	//}
-	pid.Write(self.PIDFile)
+
+	// TODO: This is the method using our pid system
+	//pid.Write(self.PIDFile)
+
 	return processFiles
 }
 
@@ -167,7 +173,7 @@ func (self *Process) child() error {
 	self.Initialized = true
 	decoder := json.NewDecoder(os.Stdin)
 	if err := decoder.Decode(self); err != nil {
-		pid.Clean(self.PIDFile)
+		//pid.Clean(self.PIDFile)
 		return err
 	}
 	// create PID file after context decoding to know PID file full path.
@@ -175,13 +181,13 @@ func (self *Process) child() error {
 	// necessary unless we scale this up to handle several processes
 	// TODO: we should just have a cleanup function and a encapsulating function
 	// that will run it if error, instead of calling pid.Clean more than once.
-	pid.Write(self.PIDFile)
+	//pid.Write(self.PIDFile)
 	if err := syscall.Close(0); err != nil {
-		pid.Clean(self.PIDFile)
+		//pid.Clean(self.PIDFile)
 		return err
 	}
 	if err := syscallDup(3, 0); err != nil {
-		pid.Clean(self.PIDFile)
+		//pid.Clean(self.PIDFile)
 		return err
 	}
 	if self.Umask != 0 {
@@ -189,7 +195,7 @@ func (self *Process) child() error {
 	}
 	if len(self.Chroot) > 0 {
 		if err := syscall.Chroot(self.Chroot); err != nil {
-			pid.Clean(self.PIDFile)
+			//pid.Clean(self.PIDFile)
 			return err
 		}
 	}

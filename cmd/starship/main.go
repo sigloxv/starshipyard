@@ -74,7 +74,8 @@ func main() {
 
 						if c.Bool("daemon") {
 							fmt.Println("[starship] launching in daemon mode...")
-							s.StartAsDaemon()
+							fmt.Println("[starship] not currently implemented, work on this functionality is in progress")
+							//s.StartAsDaemon()
 						} else {
 							s.Start()
 						}

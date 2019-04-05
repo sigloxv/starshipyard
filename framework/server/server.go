@@ -11,6 +11,8 @@ import (
 	kvstore "github.com/multiverse-os/starshipyard/framework/db/kvstore"
 	template "github.com/multiverse-os/starshipyard/framework/html/template"
 	router "github.com/multiverse-os/starshipyard/framework/server/router"
+
+	starship "github.com/multiverse-os/starshipyard"
 )
 
 // NOTE: Sessions are low level, especially in the Starship Yard model where we
@@ -65,7 +67,9 @@ func (self *Server) LoadSessionStore() {
 func (self *Server) Start() {
 	//self.LoadMiddleware()
 	//self.LoadTemplates()
-	//self.LoadRoutes()
+
+	self.Router = starship.Router()
+
 	self.HTTP = &http.Server{Addr: self.ListenAt(), Handler: self.Router}
 	fmt.Println("[starship] http server listening on [ " + self.ListenAt() + " ]")
 	self.HTTP.ListenAndServe()
