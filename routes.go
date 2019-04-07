@@ -7,6 +7,17 @@ import (
 	router "github.com/multiverse-os/starshipyard/framework/server/router"
 )
 
+// TODO: Want to generate these variables that provide helper links to routes
+// automatically so we dont have to manually define them separately to the
+// routes. These should be available in both the views and controllers, with a
+// ""." import so they dont require a package name. So they can be used just
+// like rails.
+const (
+	root_path       = "/"
+	login_path      = "/login"
+	public_key_path = "/public_key"
+)
+
 func Router() router.Router {
 	r := router.New()
 
@@ -18,3 +29,16 @@ func Router() router.Router {
 
 	return r
 }
+
+//import (
+//	html "github.com/multiverse-os/starshipyard/framework/html"
+//	template "github.com/multiverse-os/starshipyard/framework/html/template"
+//)
+
+// TODO: Building out rails-like path/route conviences preferably generated
+// from a route defintion
+// We want a system that:
+//  * we have a function to init routes, providing us with these variables or
+//  this but in a map.
+//  * paths should be lowercase
+// * outpput a title which chops of first / or last item of / split

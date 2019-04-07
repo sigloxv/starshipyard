@@ -3,7 +3,7 @@ package db
 import (
 	"fmt"
 
-	kvstore "github.com/multiverse-os/starshipyard/framework/db/kvstore"
+	kvstore "github.com/multiverse-os/starshipyard/framework/database/kvstore"
 )
 
 type KV struct {
@@ -21,6 +21,13 @@ func InitKV(path string) *KV {
 		Store:       store,
 		Collections: map[string]*kvstore.KeyValue{},
 	}
+}
+
+// NOTE: Chainable collection initialization for an easier to use API for simple
+// uses of the KV store; see sessions
+func (self *KV) WithCollection(name string) *KV {
+	self.NewCollection(name)
+	return self
 }
 
 // TODO: Or perhaps LoadOrCreateCollection(name string)

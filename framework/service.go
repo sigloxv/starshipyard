@@ -24,6 +24,7 @@ func (self *Application) Start() {
 func (self *Application) Stop() {
 	fmt.Println("[shipyard] initiating cleanup sequence, and stopping the starship process")
 	self.HTTPServer.Stop()
+	self.Sessions.Store.Close()
 	self.KV.Store.Close()
 	self.Process.CleanPid()
 	os.Exit(0)

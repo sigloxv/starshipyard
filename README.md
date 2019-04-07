@@ -70,6 +70,30 @@ illustration:
 
 ```
 
+### MVC
+
+
+##### Controllers
+
+Should determine if controllers should have the routes merged in or if the
+routes shoudl remain separate like with Rails. The routes will not likely end up
+in the config path as with Rails because that location is tedious so itll either
+be near controllers or in the root path. 
+
+##### Templates
+The controller is where we will select the template used and the views is where
+the specifics of the template with be defined. Supporting multiple templates
+should be a lot easier than it was in Rails and it should be very easy to use
+specific templates for specific controller actions.
+
+
+### Dependencies
+Currently the only dependency is the `xid` library for handling universal ids,
+but if we incorproate this library into a bson and UUID library as planned we
+can remove all dependencies from this web framework. This would be ideal, using
+only standard libraries and requiring no outside libraries beyond the Multiverse
+maintained libraries (like scramble keys). 
+
 *The remaining documentation needs to be updated, merged, or removed.*
 
 -------------------------------------------------------------------------------
