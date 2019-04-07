@@ -31,6 +31,32 @@ the developer to  pick defaults that best suite their project.
 Another important deviation from Rails is that `starshipyard` primary focus is on 
 providing cutting-edge security over everything else. 
 
+### Scramble Identity base session and authorization
+
+
+### Templating 
+
+
+
+### Development
+**Tasks** include forward push to cover MVC, basic object example, code
+generation for each of the MVC componenets, and completing each CLI command and
+subcommand currently outlined in the `cmd/starship/main.go` file. 
+
+**Additionally, the before/after action hooks on controllers need to be
+implemented to provide the basic structure most Rails developers use (along with
+the basic MVC, and routes in the root path).** 
+
+Once the alpha is built with the above requirements, it will be at that time, it
+is decided if the software will be released as is for applications to be built
+over it, maintaining the Rails structure is the base project but allowing deep,
+low-level customization by including the framework with the web application. Or
+if, like Rails, this tool eventually is used to build a new project directory
+and it is distributed as a binary, that builds, manages and launches starship
+projects. Which the metaphor works well with that at the very least.
+
+
+
 ### Starship Yard Design and Security Focus
 Starshipyard will leverage functionality provided by Multiverse OS's
 `portal-gun` to provide a isolated and deterministic operating environment.

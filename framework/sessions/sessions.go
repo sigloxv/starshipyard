@@ -16,7 +16,7 @@ type Session struct {
 	Requests            []time.Time       `json:"requests"`
 	FailedLoginAttempts int               `json:"failed_login_attempts"`
 	RateLimitedCount    int               `json:"rate_limited_count"`
-	Nonce               int               `json:"nonce,omitempty"` // Will be used in REST API
+	Nonce               int               `json:"nonce,omitempty"`
 	Data                map[string]string `json:"data,omitempty"`
 	CreatedAt           time.Time         `json:"created_at"`
 }
