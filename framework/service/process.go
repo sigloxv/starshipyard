@@ -60,15 +60,14 @@ func ParseProcess() *Process {
 // NOTE: Returns the close function so that it can be called easily added to a
 // defer. This is important because since we are doing OS based locks on the
 // pidfile we may need to unlock the file
-func (self *Process) WritePid(path string) func() error {
+func (self *Process) WritePid(path string) *pid.File {
 	fmt.Println("[starship] writing pid:", self.Pid)
 	if pidFile, err := pid.Write(path); err != nil {
 		panic(fmt.Sprintf("[fatal error] failed to write pid:", err))
 	} else {
 		self.PidFile = pidFile
-		return nil
+		return self.PidFile
 	}
-	return self.PidFile.Close
 }
 
 func (self *Process) CleanPid() error {

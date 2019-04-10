@@ -80,22 +80,20 @@ func Init(config config.Config) *Application {
 		Server:      make(map[server.ServerType]*server.Server),
 	}
 	app.Process.Signals = service.OnShutdownSignals(func(s os.Signal) {
-
 		if s.String() == "interrupt" {
 			fmt.Printf("\n")
 		}
 		fmt.Println("[starship] received exit signal:", s)
 		app.Stop()
 	})
-
-	cleanPid := app.Process.WritePid(app.Config.Pid)
-	app.AppendToShutdownProcess(cleanPid)
+	app.Process.WritePid(app.Config.Pid)
 
 	//app.ParseApplicationrirectories()
 
 	// TODO: Handle models
 	// TODO: Load databases into Store map
-	// TODO: Load HTTP server into server map
+	// TODO: Load HTTP server into server
+	// mapaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 	app.AppendToShutdownProcess(TestShutdownProcess)
 
