@@ -13,27 +13,32 @@ type Environment int
 const (
 	Development Environment = iota
 	Testing
-	Staging
 	Production
-	Maintainance
 )
 
 func (self Environment) String() string {
 	switch self {
 	case Testing:
 		return "testing"
-	case Staging:
-		return "staging"
 	case Production:
 		return "production"
-	case Maintainance:
-		return "maintainance"
 	default:
 		return "development"
 	}
 }
 
-// TODO: Not a fan of local de
+type Maintainance struct {
+	Enabled      bool   `yaml:"enabled"`
+	UserSessions bool   `yaml:"user_sessions"`
+	Announcement string `yaml:"announcement"`
+}
+
+// TODO: Would prefer it to all be under app: like seen in rails,  and this can
+// be done using our own marshal and unmarshal funcitons would should be done
+// regardless for maximum control
+// TODO: Address/Port should be handled in an nginx like configuration since
+// this application framework is meant to be able to handle reverse proxy,
+// multiple hosts/domains
 type Config struct {
 	AppName            string   `yaml:"name"`
 	Description        string   `yaml:"description"`

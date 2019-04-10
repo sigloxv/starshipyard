@@ -1,14 +1,15 @@
 package framework
 
 import (
+	"fmt"
 	"io/ioutil"
 
 	config "github.com/multiverse-os/starshipyard/framework/config"
 	yaml "gopkg.in/yaml.v2"
 )
 
-func DefaultConfig() *config.Config {
-	return &config.Config{
+func DefaultConfig() config.Config {
+	return config.Config{
 		AppName:     "starship",
 		Description: "a web application framework with a focus on security and heavily inspired by rails",
 		Keywords:    []string{"web", "framework", "example", "golang"},
@@ -24,14 +25,33 @@ func DefaultConfig() *config.Config {
 	}
 }
 
-func LoadConfig(path string) (config *config.Config, err error) {
+func LoadConfig(path string) (config config.Config, err error) {
 	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, err
+		return config, err
 	}
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
-		return nil, err
+		return config, err
 	}
 	return config, nil
+}
+
+func ValidateConfig(config config.Config) config.Config {
+	// TODO: Need more validations for all the individual fields
+	// TODO: Port needs to only support actual ports 1 - ~65000
+	if len(config.Pid) == 0 {
+		config.Pid = "tmp/pids/starship.pid"
+		fmt.Println("config.Pid set to because it was blank:", config.Pid)
+	}
+	if len(config.TemporaryDirectory) == 0 {
+		config.TemporaryDirectory = "tmp"
+	}
+	if len(config.DataDirectory) == 0 {
+		config.DataDirectory = "data"
+	}
+	if len(config.CacheDirectory) == 0 {
+		config.CacheDirectory = "tmp/cache"
+	}
+	return config
 }

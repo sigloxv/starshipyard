@@ -10,8 +10,11 @@ import (
 	signal "github.com/multiverse-os/starshipyard/framework/service/signal"
 )
 
+// TODO: May want to add a weight concept so that certain functions will be
+// esnured to be ran before others
 type Process struct {
 	Pid                int
+	PidFile            *pid.File
 	User               string
 	UID                int
 	GID                int
@@ -21,8 +24,22 @@ type Process struct {
 	Executable         string
 	WorkingDirectory   string
 	StartedAt          time.Time
-	PidFile            *pid.File
 	Signals            signal.Handler
+	Shutdown           []func()
+}
+
+// NOTE: These functions are intended to be specific to this process, as this
+// application framework expands to running multiple child processes, this will
+// enable dynamic editing of shutdown sequence per child procses. (The
+// functionality for removing ShutdownFunctions has not yet been added)
+func (self *Process) ShutdownProcess() {
+	for _, function := range self.Shutdown {
+		function()
+	}
+}
+
+func (self *Process) AppendToShutdown(exitFunction func()) {
+	self.Shutdown = append(self.Shutdown, exitFunction)
 }
 
 func ParseProcess() *Process {
@@ -40,13 +57,18 @@ func ParseProcess() *Process {
 }
 
 //[ Method for process ]///////////////////////////////////////////////////////
-func (self *Process) WritePid(path string) error {
+// NOTE: Returns the close function so that it can be called easily added to a
+// defer. This is important because since we are doing OS based locks on the
+// pidfile we may need to unlock the file
+func (self *Process) WritePid(path string) func() error {
+	fmt.Println("[starship] writing pid:", self.Pid)
 	if pidFile, err := pid.Write(path); err != nil {
 		panic(fmt.Sprintf("[fatal error] failed to write pid:", err))
 	} else {
 		self.PidFile = pidFile
 		return nil
 	}
+	return self.PidFile.Close
 }
 
 func (self *Process) CleanPid() error {

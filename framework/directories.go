@@ -20,9 +20,7 @@ func (self *Application) ParseApplicationDirectories() {
 	if self.Directories.Working, err = os.Getwd(); err != nil {
 		panic(fmt.Sprintf("[fatal error] failed to determine working directory:", err))
 	}
-	if self.Directories.Temporary = os.TempDir(); err != nil {
-		panic(fmt.Sprintf("[fatal error] failed to obtain temporary directory:", err))
-	}
+	self.Directories.Temporary = os.TempDir()
 }
 
 func (self *Application) ParseUserDirectories() {

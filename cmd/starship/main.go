@@ -9,6 +9,11 @@ import (
 	cli "github.com/urfave/cli"
 )
 
+// TODO: Review the additional functionality provided by Rails binary, so that
+// features like `rails notes` can be added (which scans files for TODO and for
+// our purposes NOTE, and likely define what it looks for via YAML configuration
+// for a generally useful system; then take these TODOs and others and build a
+// notes file to help guide development).
 func main() {
 	cmd := cli.NewApp()
 	cmd.Name = "starship"

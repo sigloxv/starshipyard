@@ -18,12 +18,6 @@ import (
 // NOTE: Concept: we want to be able to run multiple applications in a given
 // instance. This would likely be defined by a ruby-like script config that
 // defines what domains go where, reverse and inverting proxy settings, etc
-//type Domain struct {
-//	Name        string
-//	Subdomains  []string
-//	Certificate string
-//}
-
 // TODO: Starship Yard is meant to function as both the web application and
 // include the firewall/reverse-proxy. This means we need to be able to register
 // multiple end-points.
@@ -35,49 +29,42 @@ import (
 // information
 type Application struct {
 	ScrambleKey scramble.Key
-	Config      *config.Config
+	Config      config.Config
 	Process     *service.Process
 	Directories ApplicationDirectories
-	Template    map[template.TemplateType]*template.Template     // TODO: Should template data just be stored in a store?
-	Store       map[datastore.DatastoreType]*datastore.Datastore // NOTE: Just store, but will make more sense when calling something from the map
-	Server      map[server.ServerType]*server.Server
+
+	Shutdown []func() error
+
+	Template map[template.TemplateType]*template.Template     // TODO: Should template data just be stored in a store?
+	Store    map[datastore.DatastoreType]*datastore.Datastore // NOTE: Just store, but will make more sense when calling something from the map
+	Server   map[server.ServerType]*server.Server
 }
 
 func seedRandom() {
 	rand.Seed(time.Now().UTC().UnixNano())
 }
 
-func Init(config *config.Config) *Application {
-	seedRandom()
+func DropPriviledges() {
 	if service.IsRootUser() {
 		fmt.Println("[starship] running internet facing servers as root is very dangerous, run as an unpriviledged user")
 		os.Exit(1)
 		// TODO: Lets drop priviledges
 	}
+}
 
-	//wd, _ := os.Getwd()
+func Init(config config.Config) *Application {
+	DropPriviledges()
+
+	seedRandom()
 	// NOTE: This is bare minimum validation and default fallbacks so that errors
 	// are not thrown when setting up the application process signal handler, pid
 	// control and other service functionality. An improved string/path validation
 	// needs to be built ontop fo this basic functionality
-	if len(config.Pid) == 0 {
-		config.Pid = "tmp/pids/starship.pid"
-		fmt.Println("config.Pid set to because it was blank:", config.Pid)
-	}
-	if len(config.TemporaryDirectory) == 0 {
-		config.TemporaryDirectory = "tmp"
-	}
-	if len(config.DataDirectory) == 0 {
-		config.DataDirectory = "data"
-	}
-	if len(config.CacheDirectory) == 0 {
-		config.CacheDirectory = "tmp/cache"
-	}
+	config = ValidateConfig(config)
 
-	service.WritePid(config.Pid)
+	//wd, _ := os.Getwd()
 
-	// TODO: Can put the *.db in a memFS for a more transient pure memory DB
-	// TODO: SHould encapsualte all files into a embedded virtualFS so
+	// TODr: SHould encapsualte all files into a embedded virtualFS so
 	// transversals and similar attacks are within a virtual system that is
 	// outside the actual FS or encapsulated so its segregated from the FS
 	// preferably in reality stored in a BoltFS or similar type DB. Ideally in
@@ -87,15 +74,13 @@ func Init(config *config.Config) *Application {
 		ScrambleKey: scramble.GenerateKey(),
 		Config:      config,
 		Process:     service.ParseProcess(),
+		Shutdown:    []func() error{},
 		Template:    make(map[template.TemplateType]*template.Template),
 		Store:       make(map[datastore.DatastoreType]*datastore.Datastore),
 		Server:      make(map[server.ServerType]*server.Server),
-		//HTTP:        server.NewHTTP(config.Address, config.Port),
-		//KV:          database.InitKV("db/kv.db"),
-		//Sessions:    database.InitKV("db/sessions.db").WithCollection("sessions"),
 	}
-
 	app.Process.Signals = service.OnShutdownSignals(func(s os.Signal) {
+
 		if s.String() == "interrupt" {
 			fmt.Printf("\n")
 		}
@@ -103,19 +88,26 @@ func Init(config *config.Config) *Application {
 		app.Stop()
 	})
 
-	fmt.Println("[starship] writing pid:", app.Config.Pid)
-	app.Process.WritePid(app.Config.Pid)
-	app.ParseApplicationDirectories()
-	//app.ParseUserDirectories()
+	cleanPid := app.Process.WritePid(app.Config.Pid)
+	app.AppendToShutdownProcess(cleanPid)
 
-	// TODO: THESE NEED TO BE NOT DEFINED HERE, they MUST be defined by the models
-	// in the models folder, not in the framework. Infact  ALL application
-	// settings need to be migrated out of this and only overridable defaults or
-	// security oriented decisions should be in the framework portion of the
-	// codebase
-	//app.KV.NewCollection("users")
+	//app.ParseApplicationrirectories()
 
-	// TODO: Load controllers, models, etc
+	// TODO: Handle models
+	// TODO: Load databases into Store map
+	// TODO: Load HTTP server into server map
+
+	app.AppendToShutdownProcess(TestShutdownProcess)
 
 	return app
+}
+
+func TestShutdownProcess() error {
+	fmt.Println("SUCCESS! Shutdown process is running through appended functions!")
+	return nil
+}
+
+func (self *Application) OpenKVStore(path string) (Close func()) {
+	kv := datastore.OpenKVStore(path)
+	return kv.Close
 }
