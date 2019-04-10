@@ -14,7 +14,7 @@ func (self *Application) Start() {
 
 	// TODO: Shouldw e load the routes from the root/routes.go file and pass it
 	// through the Start() method?
-	self.HTTPServer.Start()
+	//self.HTTP.Start()
 	// TODO: Should hold open application until stop is called. Id like a better
 	// way of holding the application open
 	for {
@@ -23,15 +23,15 @@ func (self *Application) Start() {
 
 func (self *Application) Stop() {
 	fmt.Println("[shipyard] initiating cleanup sequence, and stopping the starship process")
-	self.HTTPServer.Stop()
-	self.Sessions.Store.Close()
-	self.KV.Store.Close()
+	//self.HTTPServer.Stop()
+	//self.Sessions.Store.Close()
+	//self.KV.Store.Close()
 	self.Process.CleanPid()
 	os.Exit(0)
 }
 
 func (self *Application) Restart() {
-	self.HTTPServer.Stop()
-	self.HTTPServer.Start()
+	//self.HTTPServer.Stop()
+	//self.HTTPServer.Start()
 	fmt.Println("[shipyard] restarting the web application http server")
 }

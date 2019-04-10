@@ -8,12 +8,23 @@ func New() *Mux {
 	return NewMux()
 }
 
+// TODO: Map the `root_path` type handle to the controllers, that way we can
+// potentially declare Before/After action(route) via these routes in a map.
+
 type Router interface {
 	http.Handler
 	Routes
 	Use(middlewares ...func(http.Handler) http.Handler)
 	With(middlewares ...func(http.Handler) http.Handler) Router
 	Group(fn func(r Router)) Router
+
+	// TODO: Should the BeforeRoute and AfterRoute (in Rails Before and After
+	// Action be a middleware or just built into the router?)
+	// Either we need to auto-magicaly generate the path variables, that are
+	// familiar to Rails developers:
+	// (i.e. root_path, user_login_path, register_user_path, etc)
+	// Or as in Rails we can have them be defined during routes declaration.
+	// Such as
 	Route(pattern string, fn func(r Router)) Router
 	Mount(pattern string, h http.Handler)
 	Handle(pattern string, h http.Handler)
@@ -29,6 +40,7 @@ type Router interface {
 	Post(pattern string, h http.HandlerFunc)
 	Put(pattern string, h http.HandlerFunc)
 	Trace(pattern string, h http.HandlerFunc)
+
 	NotFound(h http.HandlerFunc)
 	MethodNotAllowed(h http.HandlerFunc)
 }

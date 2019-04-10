@@ -7,7 +7,7 @@ import (
 	"time"
 
 	config "github.com/multiverse-os/starshipyard/framework/config"
-	database "github.com/multiverse-os/starshipyard/framework/database"
+	datastore "github.com/multiverse-os/starshipyard/framework/datastore"
 	template "github.com/multiverse-os/starshipyard/framework/html/template"
 	server "github.com/multiverse-os/starshipyard/framework/server"
 	service "github.com/multiverse-os/starshipyard/framework/service"
@@ -34,14 +34,13 @@ import (
 // TODO: Build a string function to provide a nice ouput with all necesary
 // information
 type Application struct {
+	ScrambleKey scramble.Key
 	Config      *config.Config
 	Process     *service.Process
-	HTTPServer  *server.Server
-	Templates   map[template.TemplateType]*template.Template
-	ScrambleKey scramble.Key
-	KV          *database.KV
-	Sessions    *database.KV
 	Directories ApplicationDirectories
+	Template    map[template.TemplateType]*template.Template     // TODO: Should template data just be stored in a store?
+	Store       map[datastore.DatastoreType]*datastore.Datastore // NOTE: Just store, but will make more sense when calling something from the map
+	Server      map[server.ServerType]*server.Server
 }
 
 func seedRandom() {
@@ -50,7 +49,6 @@ func seedRandom() {
 
 func Init(config *config.Config) *Application {
 	seedRandom()
-
 	if service.IsRootUser() {
 		fmt.Println("[starship] running internet facing servers as root is very dangerous, run as an unpriviledged user")
 		os.Exit(1)
@@ -58,7 +56,6 @@ func Init(config *config.Config) *Application {
 	}
 
 	//wd, _ := os.Getwd()
-
 	// NOTE: This is bare minimum validation and default fallbacks so that errors
 	// are not thrown when setting up the application process signal handler, pid
 	// control and other service functionality. An improved string/path validation
@@ -87,13 +84,15 @@ func Init(config *config.Config) *Application {
 	// blocks (crc32) or similar that can be scaled up by replicating across
 	// harddisks to overcome IO bottlenecks
 	app := &Application{
-		Config:      config,
-		HTTPServer:  server.New(config),
-		KV:          database.InitKV("db/kv.db"),
-		Sessions:    database.InitKV("db/sessions.db").WithCollection("sessions"),
 		ScrambleKey: scramble.GenerateKey(),
+		Config:      config,
 		Process:     service.ParseProcess(),
-		Templates:   make(map[template.TemplateType]*template.Template),
+		Template:    make(map[template.TemplateType]*template.Template),
+		Store:       make(map[datastore.DatastoreType]*datastore.Datastore),
+		Server:      make(map[server.ServerType]*server.Server),
+		//HTTP:        server.NewHTTP(config.Address, config.Port),
+		//KV:          database.InitKV("db/kv.db"),
+		//Sessions:    database.InitKV("db/sessions.db").WithCollection("sessions"),
 	}
 
 	app.Process.Signals = service.OnShutdownSignals(func(s os.Signal) {
@@ -114,7 +113,7 @@ func Init(config *config.Config) *Application {
 	// settings need to be migrated out of this and only overridable defaults or
 	// security oriented decisions should be in the framework portion of the
 	// codebase
-	app.KV.NewCollection("users")
+	//app.KV.NewCollection("users")
 
 	// TODO: Load controllers, models, etc
 

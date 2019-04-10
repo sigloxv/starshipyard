@@ -1,0 +1,10 @@
+git: "https://github.com/multiverse-os/starshipyard"
+build:
+  commands:
+    make:
+    install:
+    cleanup: "rm cmd/starship/starship"
+hook:
+  on_change:
+    filetypes: "*.go"
+    command: "go build && go server stop && go server start"
