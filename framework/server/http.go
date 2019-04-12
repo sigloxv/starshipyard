@@ -18,7 +18,6 @@ type HTTPServer struct {
 	HTTP   *http.Server
 	Router router.Router
 	TLS    *TLS
-	cache  map[string]string
 }
 
 func NewHTTP(address string, port int) Server {

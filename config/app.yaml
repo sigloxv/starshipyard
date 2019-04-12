@@ -1,11 +1,8 @@
-name: "starship"
-description: "a web framework example in GO abstracted ontop of the existing Chi web router framework."
-keywords: ["web", "framework", "example", "golang"]
-maintainance: false
-announcement: "The site is down for maintainance and will return soon"
-sessions: true
-pid: "tmp/pids/starship.pid"
 environment: "development"
 address: "localhost"
 port: 3000
-debug: true
+pid: "tmp/pids/starship.pid"
+maintainance:
+  enabled: false
+  user_sessions: true
+  announcement: "The site is down for maintainance and will return soon"

@@ -1,31 +1,23 @@
-package main
+package views
 
 import (
 	"fmt"
 
+	css "github.com/multiverse-os/starshipyard/views/css"
+
 	template "github.com/multiverse-os/starshipyard/framework/html/template"
 )
 
-func Layouts() {
-	// TODO: Is this required with below?
-	self.Templates[template.DefaultTemplate] = &template.Template{
-		Title:       self.Config.AppName,
-		CSS:         html.DefaultCSS(),
-		Description: self.Config.Description,
-		Keywords:    self.Config.Keywords,
-		// TODO: just example, will be defined later via UI
-	}
-
-	self.Templates[template.ErrorTemplate] = &template.Template{
-		Title:       self.Config.AppName,
-		Description: self.Config.Description,
-		Keywords:    self.Config.Keywords,
+func DefaultLayout(title, yield string) string {
+	return template.Template{
+		Type:        template.DefaultTemplate,
+		Title:       ("Title prfeix - " + title),
+		Description: "A fitting description",
+		Keywords:    []string{"webapp", "framework"},
+		CSS:         css.DefaultCSS(),
+		Content:     yield,
 	}
 }
 
-func DefaultLayout(yield string) string {
-	fmt.Println("default layout will be the general structure that will then")
-	fmt.Println("have the specific view rendered inside of in a yield like")
-	fmt.Println("yeild for now is a string:", yield)
-	fmt.Println("nesting using closures (nesting functions")
-}
+// TODO: Views should use this default template, and extend it for each page by
+// adding sections.

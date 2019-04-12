@@ -1,4 +1,4 @@
-package html
+package css
 
 // TODO: Color scheme should be passed into this function from the template
 // backend, and it will be defined in the config or some part of the

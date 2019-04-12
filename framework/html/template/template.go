@@ -45,7 +45,7 @@ func BlankFavicon() html.Element {
 
 // TODO: Or maybe we should store content in rows (divided by <div
 // class='columns'></div>)
-type TemplateSection struct {
+type Section struct {
 	Columns int
 	Content string
 }
@@ -54,6 +54,7 @@ type TemplateSection struct {
 // locate the various aspects of the parsed HTML to simplify automation (like
 // mechanize) of web sites.
 type Template struct {
+	Type          TemplateType
 	Request       *http.Request
 	FlashMessages flashmessages.FlashMessages
 
@@ -66,7 +67,7 @@ type Template struct {
 	SidebarMenu navigation.Menu
 	FooterMenu  navigation.Menu
 	Content     string
-	Sections    []TemplateSection
+	Sections    []Section
 }
 
 func (self *Template) Render(request *http.Request, content string) *Template {

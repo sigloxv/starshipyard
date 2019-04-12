@@ -18,6 +18,8 @@ const (
 	public_key_path = "/public_key"
 )
 
+// TODO: To avoid the use of globals it is very likely we will need to pass the
+// templates through here to have them be accessible in the controlers
 func Router() router.Router {
 	r := router.New()
 
