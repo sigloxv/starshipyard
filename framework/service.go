@@ -4,17 +4,16 @@ import (
 	"fmt"
 	"os"
 
+	server "github.com/multiverse-os/starshipyard/framework/server"
 	service "github.com/multiverse-os/starshipyard/framework/service"
 )
 
-// TODO: Create a read-only database type we can use for things like the config DB
+// TODO: SysV, SystemD and Upstart init script creation and installation for
+// intelligent and most importanlty secure defaults.
 func (self *Application) StartAsDaemon() { service.Daemonize(func() { self.Start() }) }
 func (self *Application) Start() {
 	fmt.Println("[starship] starting the web application http server")
-
-	// TODO: Shouldw e load the routes from the root/routes.go file and pass it
-	// through the Start() method?
-	//self.HTTP.Start()
+	self.Server[server.HTTP].Start()
 	// TODO: Should hold open application until stop is called. Id like a better
 	// way of holding the application open
 	for {
@@ -23,13 +22,17 @@ func (self *Application) Start() {
 
 func (self *Application) Stop() {
 	fmt.Println("[shipyard] initiating cleanup sequence, and stopping the starship process")
-	self.ShutdownApplication()
+	// NOTE: Could not work with stores so they will automatically be handled below
+	self.ShutdownFunctions()
 	self.Process.CleanPid()
+	for _, store := range self.Store {
+		store.Close()
+	}
 	os.Exit(0)
 }
 
 func (self *Application) Restart() {
-	//self.HTTPServer.Stop()
-	//self.HTTPServer.Start()
+	self.Server[server.HTTP].Stop()
+	self.Server[server.HTTP].Start()
 	fmt.Println("[shipyard] restarting the web application http server")
 }

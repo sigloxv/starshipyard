@@ -1,18 +1,20 @@
 package datastore
 
-// TODO: Datastore open funcitons should return the close function hneeded to
-// properly close the database. This can then be stored in the shutdown slice of
-// functions for clean shutdown
-
 type DatastoreType int
 
 const (
 	KVStore DatastoreType = iota
+	Session
+	Cache
 	ObjectStore
+	//Graph
+	//Blob
+	//FileStore
 	//ConstantStore
 	//Timeseries
 	//Trie
 	//AppendOnly
+	//Columnar (should have SQL aliased)
 )
 
 // Aliases

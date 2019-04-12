@@ -3,7 +3,7 @@ package server
 type ServerType int
 
 const (
-	HTTPServer ServerType = iota
+	HTTP ServerType = iota
 )
 
 type Server interface {

@@ -15,6 +15,16 @@ import (
 	scramble "github.com/multiverse-os/scramble-key"
 )
 
+// Aliasing for simplicity, enables the API to be app.Server[HTTP] instead of
+// app.Server[server.HTTP] without calling the entire server package with `.`
+var (
+	HTTP        = server.HTTP
+	KVStore     = datastore.KVStore
+	ObjectStore = datastore.ObjectStore
+	Cache       = datastore.Cache
+	Session     = datastore.Session
+)
+
 // NOTE: Concept: we want to be able to run multiple applications in a given
 // instance. This would likely be defined by a ruby-like script config that
 // defines what domains go where, reverse and inverting proxy settings, etc
@@ -33,11 +43,11 @@ type Application struct {
 	Process     *service.Process
 	Directories ApplicationDirectories
 
-	Shutdown []func() error
+	Shutdown []func()
 
-	Template map[template.TemplateType]*template.Template     // TODO: Should template data just be stored in a store?
-	Store    map[datastore.DatastoreType]*datastore.Datastore // NOTE: Just store, but will make more sense when calling something from the map
-	Server   map[server.ServerType]*server.Server
+	Template map[template.TemplateType]*template.Template    // TODO: Should template data just be stored in a store?
+	Store    map[datastore.DatastoreType]datastore.Datastore // NOTE: Just store, but will make more sense when calling something from the map
+	Server   map[server.ServerType]server.Server
 }
 
 func seedRandom() {
@@ -54,7 +64,6 @@ func DropPriviledges() {
 
 func Init(config config.Config) *Application {
 	DropPriviledges()
-
 	seedRandom()
 	// NOTE: This is bare minimum validation and default fallbacks so that errors
 	// are not thrown when setting up the application process signal handler, pid
@@ -62,9 +71,7 @@ func Init(config config.Config) *Application {
 	// needs to be built ontop fo this basic functionality
 	config = ValidateConfig(config)
 
-	//wd, _ := os.Getwd()
-
-	// TODr: SHould encapsualte all files into a embedded virtualFS so
+	// TODO: SHould encapsualte all files into a embedded virtualFS so
 	// transversals and similar attacks are within a virtual system that is
 	// outside the actual FS or encapsulated so its segregated from the FS
 	// preferably in reality stored in a BoltFS or similar type DB. Ideally in
@@ -74,11 +81,12 @@ func Init(config config.Config) *Application {
 		ScrambleKey: scramble.GenerateKey(),
 		Config:      config,
 		Process:     service.ParseProcess(),
-		Shutdown:    []func() error{},
 		Template:    make(map[template.TemplateType]*template.Template),
-		Store:       make(map[datastore.DatastoreType]*datastore.Datastore),
-		Server:      make(map[server.ServerType]*server.Server),
+		Store:       make(map[datastore.DatastoreType]datastore.Datastore),
+		Server:      make(map[server.ServerType]server.Server),
 	}
+	// Process Information Parsing and Long running Linux service initialization
+	/////////////////////////////////////////////////////////////////////r///////
 	app.Process.Signals = service.OnShutdownSignals(func(s os.Signal) {
 		if s.String() == "interrupt" {
 			fmt.Printf("\n")
@@ -89,23 +97,22 @@ func Init(config config.Config) *Application {
 	app.Process.WritePid(app.Config.Pid)
 
 	//app.ParseApplicationrirectories()
+	app.AppendToShutdown(TestShutdownProcess)
 
-	// TODO: Handle models
-	// TODO: Load databases into Store map
-	// TODO: Load HTTP server into server
-	// mapaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	// TODO: Initialize an object store for models ion MVC structure of
+	// starshipyard
+	datastore.OpenKVStore("db/kv.store")
+	//app.AppendToShutdownProcess(kv.Close)
+	// TODO:  Initialize a cache DB with TTL or something similar
 
-	app.AppendToShutdownProcess(TestShutdownProcess)
+	// TODO: Support unix socket connections. Then several servers listening on
+	// unix sockets can be proxied with a single server listening on the port and
+	// address
+	app.Server[HTTP] = server.NewHTTP(config.Address, config.Port)
 
 	return app
 }
 
-func TestShutdownProcess() error {
+func TestShutdownProcess() {
 	fmt.Println("SUCCESS! Shutdown process is running through appended functions!")
-	return nil
-}
-
-func (self *Application) OpenKVStore(path string) (Close func()) {
-	kv := datastore.OpenKVStore(path)
-	return kv.Close
 }
