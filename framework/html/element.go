@@ -69,13 +69,18 @@ func (self Element) ChildElements(elements ...Element) Element {
 	return self
 }
 
+func (self Element) Containing(elements ...Element) Element {
+	self.content = elements
+	return self
+}
+
 // String output
 ///////////////////////////////////////////////////////////////////////////////
 func (self Element) String() (output string) {
-	if len(self.Tag.String()) == 0 {
-		fmt.Println("tag is nil!")
-		//return ""
-	}
+	//if len(self.Tag.String()) == 0 {
+	//	fmt.Println("tag is nil!")
+	//	//return ""
+	//}
 	fmt.Println("How many attributes?", len(self.Attributes))
 	output += self.Tag.Open(self.Attributes)
 	fmt.Println("output after first line:", output)
@@ -92,7 +97,12 @@ func (self Element) String() (output string) {
 	case Element:
 		output += content.String()
 	}
-	output += self.Tag.Close()
+
+	// TODO: If meta, doesnt have a close tag
+	if self.Tag != Meta {
+		output += self.Tag.Close()
+	}
+	fmt.Println("self.Tag.Close():", output)
 
 	fmt.Println("output tag:", self.Tag.String())
 

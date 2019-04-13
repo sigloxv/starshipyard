@@ -328,6 +328,10 @@ func (self Element) Relative(relative string) Element {
 	return self.Attribute(attribute.Relative, relative)
 }
 
+func (self Element) Rel(rel string) Element {
+	return self.Attribute(attribute.Rel, rel)
+}
+
 func (self Element) AccessKey(accessKey string) Element {
 	return self.Attribute(attribute.AccessKey, accessKey)
 }

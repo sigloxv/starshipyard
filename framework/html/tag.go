@@ -472,13 +472,17 @@ func (self Attributes) String() (output string) {
 	return output
 }
 
-// TODO: Using maps ensures that ordering wont be maintained
-// TODO: Should never be rendering empties
+func (self Tag) EmptyElement(attributes Attributes) string {
+	return text.AngleBracketType.Enclose(self.String() + attributes.String() + entity.Space.String() + entity.ForwardSlash.String()).String()
+}
+
 func (self Tag) Open(attributes Attributes) string {
 	switch self {
 	case HTML:
 		return text.AngleBracketType.Enclose(entity.Bang.String()+DOCTYPE+entity.Space.String()+strings.ToUpper(self.String())).String() +
 			text.AngleBracketType.Enclose(self.String()).String()
+	case Meta:
+		return self.EmptyElement(attributes)
 	default:
 		return text.AngleBracketType.Enclose(self.String() + attributes.String()).String()
 	}

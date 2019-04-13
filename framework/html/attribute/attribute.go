@@ -103,6 +103,11 @@ const (
 	ItemProp
 )
 
+// Aliases
+const (
+	Rel = Relative
+)
+
 func MarshalKey(attributeName string) Key {
 	for attribute, allowed := range map[Key]bool{} {
 		if allowed && attribute.String() == attributeName {

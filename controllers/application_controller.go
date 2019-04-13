@@ -18,5 +18,7 @@ func Template(yield string) string {
 func Root(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("root path")
 
-	w.Write([]byte(views.Root()))
+	// TODO: In the near future change this to render to and specify the format to
+	// be more similar to rails for rails developers
+	w.Write([]byte(views.Root().String()))
 }

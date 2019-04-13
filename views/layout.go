@@ -4,15 +4,15 @@ import (
 	css "github.com/multiverse-os/starshipyard/views/assets/css"
 	// TODO: Consider importing with `.` for
 	template "github.com/multiverse-os/starshipyard/views/template"
+	navigation "github.com/multiverse-os/starshipyard/views/template/navigation"
 
 	html "github.com/multiverse-os/starshipyard/framework/html"
 )
 
 // TODO: Views should use this default template, and extend it for each page by
 // adding sections.
-
-func DefaultTemplate(title string, yield html.Element) (output string) {
-	html.HTML.Containing(
+func DefaultTemplate(title string, yield html.Element) html.Element {
+	return html.HTML.Containing(
 		html.Head.Containing(
 			html.Meta.Charset("UTF-8"),
 			html.Meta.Name("description").Content("A powerful web application framework"),
@@ -21,23 +21,28 @@ func DefaultTemplate(title string, yield html.Element) (output string) {
 			html.Title.Text(title),
 			html.Style.Text(css.DefaultCSS()),
 		),
-		html.Body.Containing(
-			template.Columns(
-				template.Column(2, html.H1.Text(title)),
-				template.Column(6, html.Div.Text("navigation menu placeholder")),
-				template.Column(4, html.Div.Text("logggin")),
-			),
-			template.Columns(
-				template.Column(3, html.Div.Text("sidebar")),
-				template.Column(9, html.Div.Text("main content")),
-			),
-			template.Columns(
-				template.Column(12, html.Div.Text("footer")),
+		html.Body.Class("page-columns").Containing(
+			html.Div.Class("container").Containing(
+				template.Columns(
+					template.Column(2, html.H1.Text(title)),
+					template.Column(6, navigation.NewHeaderMenu(
+						navigation.NewMenuOption("/", "Home"),
+						navigation.NewMenuOption("/about", "About"),
+						navigation.NewMenuOption("/contact", "Contact"),
+					).HTML(),
+					),
+					template.Column(4, html.Div.Text("logggin")),
+				),
+				template.Columns(
+					template.Column(3, html.Div.Text("sidebar")),
+					template.Column(9, html.Div.Text("main content")),
+				),
+				template.Columns(
+					template.Column(12, html.Div.Text("footer")),
+				),
 			),
 		),
 	)
-
-	return output
 }
 
 //func (self *Template) Body() html.Element {
