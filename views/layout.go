@@ -3,8 +3,8 @@ package views
 import (
 	css "github.com/multiverse-os/starshipyard/views/assets/css"
 	// TODO: Consider importing with `.` for
-	template "github.com/multiverse-os/starshipyard/views/template"
-	navigation "github.com/multiverse-os/starshipyard/views/template/navigation"
+	//template "github.com/multiverse-os/starshipyard/views/template"
+	//navigation "github.com/multiverse-os/starshipyard/views/template/navigation"
 
 	html "github.com/multiverse-os/starshipyard/framework/html"
 )
@@ -21,27 +21,49 @@ func DefaultTemplate(title string, yield html.Element) html.Element {
 			html.Title.Text(title),
 			html.Style.Text(css.DefaultCSS()),
 		),
-		html.Body.Class("page-columns").Containing(
-			html.Div.Class("container").Containing(
-				template.Columns(
-					template.Column(2, html.H1.Text(title)),
-					template.Column(6, navigation.NewHeaderMenu(
-						navigation.NewMenuOption("/", "Home"),
-						navigation.NewMenuOption("/about", "About"),
-						navigation.NewMenuOption("/contact", "Contact"),
-					).HTML(),
+		html.Body.Containing(
+			html.Nav.Id("navbar").Class("navbar").Containing(
+				html.Div.Class("container").Containing(
+					html.Div.Class("navbar-brand").Containing(
+						html.H5.Class("title").Text("Starship"),
 					),
-					template.Column(4, html.Div.Text("logggin")),
-				),
-				template.Columns(
-					template.Column(3, html.Div.Text("sidebar")),
-					template.Column(9, html.Div.Text("main content")),
-				),
-				template.Columns(
-					template.Column(12, html.Div.Text("footer")),
+					html.Div.Class("navbar-menu").Containing(
+						html.Div.Class("navbar-start").Containing(
+							html.A.Class("navbar-item").Href("/").Text("Home"),
+							html.A.Class("navbar-item").Href("/about").Text("About"),
+							html.A.Class("navbar-item").Href("/contact").Text("Contact"),
+							html.A.Class("navbar-item").Href("/login").Text("Login"),
+							html.A.Class("navbar-item").Href("/register").Text("Register"),
+						),
+						html.Div.Class("navbar-end").Containing(
+							html.A.Class("navbar-item").Href("https://github.com/multiverse-os/starshipyard").Text("Github"),
+						),
+					),
 				),
 			),
 		),
+		//html.Body.Class("page-columns").Containing(
+		//html.Nav.Id("navbar").Class("navbar").Containing(
+		//	html.Div.Class("container").Containing(
+		//		template.Columns(
+		//			template.Column(2, html.H1.Text(title)),
+		//			template.Column(6, navigation.NewHeaderMenu(
+		//				navigation.NewMenuOption("/", "Home"),
+		//				navigation.NewMenuOption("/about", "About"),
+		//				navigation.NewMenuOption("/contact", "Contact"),
+		//			).HTML(),
+		//			),
+		//			template.Column(4, html.Div.Text("logggin")),
+		//		),
+		//		template.Columns(
+		//			template.Column(3, html.Div.Text("sidebar")),
+		//			template.Column(9, html.Div.Text("main content")),
+		//		),
+		//		template.Columns(
+		//			template.Column(12, html.Div.Text("footer")),
+		//		),
+		//	),
+		//),
 	)
 }
 
