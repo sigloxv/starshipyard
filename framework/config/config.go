@@ -40,12 +40,12 @@ type Maintainance struct {
 // this application framework is meant to be able to handle reverse proxy,
 // multiple hosts/domains
 type Config struct {
-	Environment   string       `yaml:"environment"`
-	Address       string       `yaml:"address"`
-	Port          int          `yaml:"port"`
-	Pid           string       `yaml:"pid"`
-	DataDirectory string       `yaml:"data"`
-	Maintainance  Maintainance `yaml:"maintainance"`
+	Environment      string       `yaml:"environment"`
+	Address          string       `yaml:"address"`
+	Port             int          `yaml:"port"`
+	Pid              string       `yaml:"pid"`
+	DataDirectory    string       `yaml:"data"`
+	MaintainanceMode Maintainance `yaml:"maintainance"`
 }
 
 func LoadConfig(path string) (config *Config, err error) {

@@ -35,6 +35,13 @@ type Element struct {
 	content    interface{}
 }
 
+func NewElement(tag Tag) Element {
+	return Element{
+		Tag:        tag,
+		Attributes: make(map[attribute.Key][]string),
+	}
+}
+
 // HTML parsing into Go structs (incomplete)
 ///////////////////////////////////////////////////////////////////////////////
 func ParseElement(html string) (element Element, err error) {
@@ -65,6 +72,11 @@ func (self Element) ChildElements(elements ...Element) Element {
 // String output
 ///////////////////////////////////////////////////////////////////////////////
 func (self Element) String() (output string) {
+	if len(self.Tag.String()) == 0 {
+		fmt.Println("tag is nil!")
+		//return ""
+	}
+	fmt.Println("How many attributes?", len(self.Attributes))
 	output += self.Tag.Open(self.Attributes)
 	fmt.Println("output after first line:", output)
 
@@ -81,5 +93,8 @@ func (self Element) String() (output string) {
 		output += content.String()
 	}
 	output += self.Tag.Close()
+
+	fmt.Println("output tag:", self.Tag.String())
+
 	return output
 }

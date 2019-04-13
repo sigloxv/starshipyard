@@ -4,6 +4,8 @@ import (
 	attribute "github.com/multiverse-os/starshipyard/framework/html/attribute"
 )
 
+//var NoAttributes = []Attribute{
+
 // Attribute Helpers
 ///////////////////////////////////////////////////////////////////////////////
 func (self Element) Attribute(key attribute.Key, values ...string) Element {

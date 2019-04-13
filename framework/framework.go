@@ -8,7 +8,6 @@ import (
 
 	config "github.com/multiverse-os/starshipyard/framework/config"
 	datastore "github.com/multiverse-os/starshipyard/framework/datastore"
-	template "github.com/multiverse-os/starshipyard/framework/html/template"
 	server "github.com/multiverse-os/starshipyard/framework/server"
 	service "github.com/multiverse-os/starshipyard/framework/service"
 
@@ -42,12 +41,9 @@ type Application struct {
 	Config      config.Config
 	Process     *service.Process
 	Directories ApplicationDirectories
-
-	Shutdown []func()
-
-	Template map[template.TemplateType]*template.Template    // TODO: Should template data just be stored in a store?
-	Store    map[datastore.DatastoreType]datastore.Datastore // NOTE: Just store, but will make more sense when calling something from the map
-	Server   map[server.ServerType]server.Server
+	Shutdown    []func()
+	Store       map[datastore.DatastoreType]datastore.Datastore // NOTE: Just store, but will make more sense when calling something from the map
+	Server      map[server.ServerType]server.Server
 }
 
 func seedRandom() {
@@ -81,7 +77,6 @@ func Init(config config.Config) *Application {
 		ScrambleKey: scramble.GenerateKey(),
 		Config:      config,
 		Process:     service.ParseProcess(),
-		Template:    make(map[template.TemplateType]*template.Template),
 		Store:       make(map[datastore.DatastoreType]datastore.Datastore),
 		Server:      make(map[server.ServerType]server.Server),
 	}

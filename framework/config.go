@@ -13,10 +13,10 @@ func DefaultConfig() config.Config {
 		Address: "localhost",
 		Port:    3000,
 		Pid:     "tmp/pids/starship.pid",
-		MaintainanceMode: Maintainance{
-			Enabled:          false,
-			Announcement:     "We are down for maintainance, and we will be back shortly.",
-			SessionsDisabled: false,
+		MaintainanceMode: config.Maintainance{
+			Enabled:      false,
+			Announcement: "We are down for maintainance, and we will be back shortly.",
+			UserSessions: false,
 		},
 	}
 }

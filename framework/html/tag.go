@@ -186,6 +186,8 @@ func (self Tag) String() string {
 		return `bdo`
 	case BlockQuote:
 		return `blockquote`
+	case Body:
+		return `body`
 	case Br:
 		return `br`
 	case Button:
@@ -391,17 +393,18 @@ func (self Tag) String() string {
 	case WBR:
 		return `wbr`
 	default:
-		return entity.EmptyString
+		return `undefined`
 	}
 }
 
-func (self Tag) Element() Element { return Element{Tag: self} }
+func (self Tag) Element() Element {
+	return NewElement(self)
+}
 
 func (self Tag) Tags(children ...Element) Element {
-	return Element{
-		Tag:     self,
-		content: children,
-	}
+	element := NewElement(self)
+	element.content = children
+	return element
 }
 
 func (self Tag) Elements(children ...Element) Element {
@@ -435,24 +438,27 @@ func (self Tag) Attributes(attrs ...attribute.Attribute) Element {
 // Content Helpers
 ///////////////////////////////////////////////////////////////////////////////
 func (self Tag) Text(content string) Element {
-	return Element{
-		Tag:     self,
-		content: string(content),
-	}
+	element := NewElement(self)
+	element.content = string(content)
+	return element
 }
 
 func (self Tag) ChildElement(element Element) Element {
-	return Element{
-		Tag:     self,
-		content: element,
-	}
+	newElement := NewElement(self)
+	newElement.content = element
+	return newElement
 }
 
 func (self Tag) ChildElements(elements ...Element) Element {
-	return Element{
-		Tag:     self,
-		content: elements,
-	}
+	element := NewElement(self)
+	element.content = elements
+	return element
+}
+
+func (self Tag) Containing(elements ...Element) Element {
+	element := NewElement(self)
+	element.content = elements
+	return element
 }
 
 // String / HTML output
@@ -471,7 +477,8 @@ func (self Attributes) String() (output string) {
 func (self Tag) Open(attributes Attributes) string {
 	switch self {
 	case HTML:
-		return text.AngleBracketType.Enclose(entity.Bang.String() + DOCTYPE + entity.Space.String() + HTML.String()).String()
+		return text.AngleBracketType.Enclose(entity.Bang.String()+DOCTYPE+entity.Space.String()+strings.ToUpper(self.String())).String() +
+			text.AngleBracketType.Enclose(self.String()).String()
 	default:
 		return text.AngleBracketType.Enclose(self.String() + attributes.String()).String()
 	}
