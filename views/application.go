@@ -13,14 +13,6 @@ func Root() html.Element {
 	)
 }
 
-func Login() html.Element {
-	return DefaultTemplate("login", 
-	html.Div.Containing(
-		html.P.Text(),
-	),
-}
-
-
 ////////////////////////////////////////////////////////////////////////////////
 // Forms
 
