@@ -1,7 +1,6 @@
 package html
 
 import (
-	"fmt"
 	"strings"
 
 	attribute "github.com/multiverse-os/starshipyard/framework/html/attribute"
@@ -413,10 +412,6 @@ func (self Tag) Elements(children ...Element) Element {
 
 func (self Tag) Attribute(attr attribute.Attribute) Element {
 	var attributes = map[attribute.Key][]string{}
-
-	fmt.Println("attr.Key.String():", attr.Key.String())
-	fmt.Println("attr.Values:", attr.Values)
-
 	attributes[attr.Key] = attr.Values
 	return Element{
 		Tag:        self,

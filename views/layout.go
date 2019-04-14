@@ -27,17 +27,17 @@ func DefaultTemplate(title string, yield html.Element) html.Element {
 			html.Nav.Id("navbar").Class("navbar").Containing(
 				html.Div.Class("container").Containing(
 					html.Div.Class("navbar-brand").Containing(
-						html.H5.Class("title").Text("Starship"),
+						html.H1.Class("title").Text("Starship"),
 					),
 					html.Div.Class("navbar-menu").Containing(
 						html.Div.Class("navbar-start").Containing(
 							html.A.Class("navbar-item").Href("/").Text("Home"),
 							html.A.Class("navbar-item").Href("/about").Text("About"),
 							html.A.Class("navbar-item").Href("/contact").Text("Contact"),
-							html.A.Class("navbar-item").Href("/login").Text("Login"),
-							html.A.Class("navbar-item").Href("/register").Text("Register"),
 						),
 						html.Div.Class("navbar-end").Containing(
+							html.A.Class("navbar-item").Href("/login").Text("Login"),
+							html.A.Class("navbar-item").Href("/register").Text("Register"),
 							html.A.Class("navbar-item").Href("https://github.com/multiverse-os/starshipyard").Text("Github"),
 						),
 					), // NavbarMenu
@@ -48,20 +48,31 @@ func DefaultTemplate(title string, yield html.Element) html.Element {
 				html.Div.Class("bd-main-container", "container").Containing(
 					html.Div.Class("columns").Containing(
 						html.Div.Class("column", "is-four-fifths").Containing(
-							html.P.Text("test"),
+							html.Div.Class("content").Containing(
+								yield,
+							),
 						),
-						html.Div.Class("column", "is-one-fifth", "sidebar").Containing(
-							html.P.Text("test sidebar"),
+						html.Div.Class("column", "bd-notification", "is-wajofij", "sidebar-menu").Containing(
+							html.UL.Containing(
+								html.LI.Class("sidebar-header").Text("Community Projects"),
+								html.LI.Class("sidebar-li").Text("Open Source Software"),
+								html.LI.Class("sidebar-li").Text("Podcasts"),
+								html.LI.Class("sidebar-li").Text("Writing"),
+								html.LI.Class("sidebar-li").Text("Comics"),
+								html.LI.Class("sidebar-li").Text("Music"),
+								html.LI.Class("sidebar-li").Text("Illustrations"),
+								html.LI.Class("sidebar-li").Text("Video"),
+								html.LI.Class("sidebar-li").Text("Organizing"),
+								html.LI.Class("sidebar-li").Text("Activism"),
+								html.LI.Class("sidebar-header").Text("Socialscribe"),
+								html.LI.Class("sidebar-li").Text("About Us"),
+								html.LI.Class("sidebar-li").Text("Transparency"),
+								html.LI.Class("sidebar-li").Text("Contact"),
+								html.LI.Class("sidebar-li").Text("Get Involved"),
+								html.LI.Class("sidebar-li").Text("Source Code"),
+							),
 						),
 					),
-					html.Div.Class("bd-duo").Containing(
-						html.Div.Class("bd-lead").Containing(
-							html.Div.Class("bd-breadcrumb").Containing(
-								html.Nav.Class("breadcrumb").Text("test"),
-							),
-						), // bdLead
-						html.Aside.Class("bd-side").Text("sidebar"),
-					), // bdDuo
 				), // bdMainContainer
 			),
 		), // Body

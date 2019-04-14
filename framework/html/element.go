@@ -2,7 +2,6 @@ package html
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	attribute "github.com/multiverse-os/starshipyard/framework/html/attribute"
@@ -31,7 +30,6 @@ type Element struct {
 	Tag        Tag
 	Block      bool
 	Attributes map[attribute.Key][]string
-	raw        RawHTML
 	content    interface{}
 }
 
@@ -77,14 +75,7 @@ func (self Element) Containing(elements ...Element) Element {
 // String output
 ///////////////////////////////////////////////////////////////////////////////
 func (self Element) String() (output string) {
-	//if len(self.Tag.String()) == 0 {
-	//	fmt.Println("tag is nil!")
-	//	//return ""
-	//}
-	fmt.Println("How many attributes?", len(self.Attributes))
 	output += self.Tag.Open(self.Attributes)
-	fmt.Println("output after first line:", output)
-
 	switch content := self.content.(type) {
 	case string:
 		if len(content) > 0 {
@@ -97,14 +88,8 @@ func (self Element) String() (output string) {
 	case Element:
 		output += content.String()
 	}
-
-	// TODO: If meta, doesnt have a close tag
 	if self.Tag != Meta {
 		output += self.Tag.Close()
 	}
-	fmt.Println("self.Tag.Close():", output)
-
-	fmt.Println("output tag:", self.Tag.String())
-
 	return output
 }
