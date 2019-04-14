@@ -38,7 +38,11 @@ func DefaultTemplate(title string, yield html.Element) html.Element {
 						html.Div.Class("navbar-end").Containing(
 							html.A.Class("navbar-item").Href("/login").Text("Login"),
 							html.A.Class("navbar-item").Href("/register").Text("Register"),
-							html.A.Class("navbar-item").Href("https://github.com/multiverse-os/starshipyard").Text("Github"),
+							html.A.Class("navbar-item").Href("https://github.com/multiverse-os/starshipyard").Containing(
+								html.Span.Class("icon").Containing(
+									html.I.Class("material-icons").Text("code"),
+								),
+							),
 						),
 					), // NavbarMenu
 				), // Container
