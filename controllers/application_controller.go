@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	//template "github.com/multiverse-os/starshipyard/framework/html/template"
 	views "github.com/multiverse-os/starshipyard/views"
 )
 

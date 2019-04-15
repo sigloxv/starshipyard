@@ -25,6 +25,17 @@ func PasswordInput(name, placeholder string) html.Element {
 	)
 }
 
+func SubmitButton(name, text string) html.Element {
+	// TODO: Validate name/placeholder
+	return html.Div.Class("field", "button-input").Containing(
+		html.Div.Class("control").Containing(
+			//html.Input.Name(name).Value(text).Class("input", ("input-"+name), "login-form").Type("button"),
+			html.Input.Value(text).Class("input", ("input-"+name), "login-form").Type("submit"),
+			html.Div.Class("error"),
+		),
+	)
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 //

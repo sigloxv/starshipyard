@@ -3,19 +3,28 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+
+	views "github.com/multiverse-os/starshipyard/views"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("login controller")
-	w.Write([]byte("GET login form goes here"))
+	w.Write([]byte(views.Login().String()))
 }
 
 func NewSession(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("POST login form to this controller and it then either forwards to login with errors or previous page logged in"))
+	r.ParseForm()
+	fmt.Println("Entering controllers.Login()")
+
+	uid := r.Form.Get("uid")
+	fmt.Println("uid:", uid)
+
+	pwd := r.Form.Get("pwd")
+	fmt.Println("pwd:", pwd)
+
+	fmt.Println("login controller")
+	w.Write([]byte(views.Root().String()))
 }
 
-// TODO: Maybe this should be in user controller, and separate user from session
-// since session would include a lot of logic on its own
 func Register(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("GET register form"))
+	w.Write([]byte(views.Root().String()))
 }

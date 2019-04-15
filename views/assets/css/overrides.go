@@ -11,5 +11,10 @@ a.side-menu-item{background:#f5f5f5;font-size:14px;color:#808080;padding:15px;wi
 .sidebar-menu{text-align:center;padding-top:18px;font-size:18px;font-weight:500;}
 .sidebar-header{text-align:left;padding-top:18px;font-size:24px;font-weight:500;}
 .sidebar-li{margin-bottom:12px;margin-top:12px;text-align:left;font-size:20px;font-weight:300;}
+.register-button{width:100%;}
+.top-spacer{margin-top:45px;}
+.forgot-password{margin-top:10px;text-align:right;}
+.forgot-password a{color:#c0c0c0;}
+.forgot-password a:hover{color:gray}
 `
 }

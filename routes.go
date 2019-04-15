@@ -25,6 +25,9 @@ func Router() router.Router {
 
 	r.Get("/", controllers.Root)
 
+	r.Get("/login", controllers.Login)
+	r.Post("/sessions/new", controllers.NewSession)
+
 	r.Get("/test", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("hi"))
 	})

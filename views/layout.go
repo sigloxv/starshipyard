@@ -77,6 +77,11 @@ func DefaultTemplate(title string, yield html.Element) html.Element {
 							),
 						),
 					),
+					html.Div.Class("columns").Containing(
+						html.Div.Class("column").Text("Footer"),
+						html.Div.Class("column").Text("section 2"),
+						html.Div.Class("column").Text("and section 3"),
+					),
 				), // bdMainContainer
 			),
 		), // Body
