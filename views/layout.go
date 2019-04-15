@@ -86,7 +86,6 @@ func DefaultTemplate(title string, yield html.Element) html.Element {
 ////////////////////////////////////////////////////////////////////////////////
 // Forms
 
-//func LoginForm(action string) string {
 //	return ""
 //	//return form.NewForm(
 //	//	action,

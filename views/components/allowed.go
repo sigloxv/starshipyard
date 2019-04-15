@@ -1,4 +1,4 @@
-package template
+package components
 
 import (
 	html "github.com/multiverse-os/starshipyard/framework/html"

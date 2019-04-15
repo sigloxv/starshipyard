@@ -36,6 +36,9 @@ var (
 // TODO: Need to persist and load scramble key
 // TODO: Build a string function to provide a nice ouput with all necesary
 // information
+
+var Store map[datastore.DatastoreType]datastore.Datastore // NOTE: Just store, but will make more sense when calling something from the map
+
 type Application struct {
 	ScrambleKey scramble.Key
 	Config      config.Config
@@ -96,13 +99,15 @@ func Init(config config.Config) *Application {
 
 	// TODO: Initialize an object store for models ion MVC structure of
 	// starshipyard
-	datastore.OpenKVStore("db/kv.store")
+	Store = make(map[datastore.DatastoreType]datastore.Datastore)
+	Store[KVStore] = datastore.OpenKVStore("db/kv.store")
 	//app.AppendToShutdownProcess(kv.Close)
 	// TODO:  Initialize a cache DB with TTL or something similar
 
 	// TODO: Support unix socket connections. Then several servers listening on
 	// unix sockets can be proxied with a single server listening on the port and
 	// address
+
 	app.Server[HTTP] = server.NewHTTP(config.Address, config.Port)
 
 	return app
