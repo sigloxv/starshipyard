@@ -27,7 +27,9 @@ func DefaultTemplate(title string, yield html.Element) html.Element {
 			html.Nav.Id("navbar").Class("navbar").Containing(
 				html.Div.Class("container").Containing(
 					html.Div.Class("navbar-brand").Containing(
-						html.H1.Class("title").Text("Starship"),
+						html.H1.Class("title").Containing(
+							html.A.Class("site-title").Href("/").Text("Starship"),
+						),
 					),
 					html.Div.Class("navbar-menu").Containing(
 						html.Div.Class("navbar-start").Containing(
@@ -78,9 +80,39 @@ func DefaultTemplate(title string, yield html.Element) html.Element {
 						),
 					),
 					html.Div.Class("columns").Containing(
-						html.Div.Class("column").Text("Footer"),
-						html.Div.Class("column").Text("section 2"),
-						html.Div.Class("column").Text("and section 3"),
+						html.Div.Class("column", "is-two-fifths").Containing(
+							html.H4.Class("footer-title").Text("A web framework"),
+							html.P.Class("footer-description").Text("Desktop user interfaces using webkit to render the single page responses that focus on HTML and CSS to avoid introducing potential security vulnerabilities."),
+							html.P.Class("footer-description").Text("And maximize preformance but also provide a simple portable design. This text is essentially lorem text."),
+						),
+						html.Div.Class("column"),
+						html.Div.Class("column").Containing(
+							html.H4.Class("footer-title").Text("Community Projects"),
+							html.UL.Class("footer-ul").Containing(
+								html.LI.Class("footer-li").Text("Software"),
+								html.LI.Class("footer-li").Text("Podcasts"),
+								html.LI.Class("footer-li").Text("Writing"),
+								html.LI.Class("footer-li").Text("Comics"),
+							),
+						),
+						html.Div.Class("column").Containing(
+							html.UL.Class("footer-ul").Containing(
+								html.LI.Class("footer-li").Text("Music"),
+								html.LI.Class("footer-li").Text("Illustrations"),
+								html.LI.Class("footer-li").Text("Video"),
+								html.LI.Class("footer-li").Text("Organizing"),
+								html.LI.Class("footer-li").Text("Activism"),
+							),
+						),
+						html.Div.Class("column").Containing(
+							html.H4.Class("footer-title").Text("Socialscribe"),
+							html.UL.Class("footer-ul").Containing(
+								html.LI.Class("footer-li").Text("Transparency"),
+								html.LI.Class("footer-li").Text("Contact"),
+								html.LI.Class("footer-li").Text("Get Involved"),
+								html.LI.Class("footer-li").Text("Source Code"),
+							),
+						),
 					),
 				), // bdMainContainer
 			),

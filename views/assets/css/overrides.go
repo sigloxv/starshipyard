@@ -13,8 +13,13 @@ a.side-menu-item{background:#f5f5f5;font-size:14px;color:#808080;padding:15px;wi
 .sidebar-li{margin-bottom:12px;margin-top:12px;text-align:left;font-size:20px;font-weight:300;}
 .register-button{width:100%;}
 .top-spacer{margin-top:45px;}
+.subhead-text{font-weight:300;}
 .forgot-password{margin-top:10px;text-align:right;}
 .forgot-password a{color:#c0c0c0;}
 .forgot-password a:hover{color:gray}
+a.site-title{color:#363636;}
+.footer-title{font-weight:800;font-size:16px;}
+.footer-description{margin-bottom:14px;font-weight:300;}
+.footer-li{padding:5px;}
 `
 }
