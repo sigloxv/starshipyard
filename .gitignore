@@ -1,3 +1,7 @@
+db/kv.store
+
+db/kvstore
+
 # Development Helpers
 rails-example
 

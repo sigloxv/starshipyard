@@ -1,6 +1,7 @@
 package framework
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 	"os"
@@ -17,11 +18,11 @@ import (
 // Aliasing for simplicity, enables the API to be app.Server[HTTP] instead of
 // app.Server[server.HTTP] without calling the entire server package with `.`
 var (
-	HTTP        = server.HTTP
-	KVStore     = datastore.KVStore
-	ObjectStore = datastore.ObjectStore
-	Cache       = datastore.Cache
-	Session     = datastore.Session
+	HTTP = server.HTTP
+	//KV   = datastore.KV
+	//ObjectStore = datastore.ObjectStore
+	//Cache       = datastore.Cache
+	//Session     = datastore.Session
 )
 
 // NOTE: Concept: we want to be able to run multiple applications in a given
@@ -37,7 +38,7 @@ var (
 // TODO: Build a string function to provide a nice ouput with all necesary
 // information
 
-var Store map[datastore.DatastoreType]datastore.Datastore // NOTE: Just store, but will make more sense when calling something from the map
+//var Store datastore.KV // NOTE: Just store, but will make more sense when calling something from the map
 
 type Application struct {
 	ScrambleKey scramble.Key
@@ -45,7 +46,7 @@ type Application struct {
 	Process     *service.Process
 	Directories ApplicationDirectories
 	Shutdown    []func()
-	Store       map[datastore.DatastoreType]datastore.Datastore // NOTE: Just store, but will make more sense when calling something from the map
+	Store       datastore.KV // NOTE: Just store, but will make more sense when calling something from the map
 	Server      map[server.ServerType]server.Server
 }
 
@@ -76,11 +77,16 @@ func Init(config config.Config) *Application {
 	// preferably in reality stored in a BoltFS or similar type DB. Ideally in
 	// blocks (crc32) or similar that can be scaled up by replicating across
 	// harddisks to overcome IO bottlenecks
+	kvStore, err := datastore.OpenKV("db/kvstore")
+	if err != nil {
+		panic(errors.New("[error] failed to open leveldb datastore:" + err.Error()))
+	}
+
 	app := &Application{
 		ScrambleKey: scramble.GenerateKey(),
 		Config:      config,
 		Process:     service.ParseProcess(),
-		Store:       make(map[datastore.DatastoreType]datastore.Datastore),
+		Store:       kvStore,
 		Server:      make(map[server.ServerType]server.Server),
 	}
 	// Process Information Parsing and Long running Linux service initialization
@@ -97,10 +103,6 @@ func Init(config config.Config) *Application {
 	//app.ParseApplicationrirectories()
 	app.AppendToShutdown(TestShutdownProcess)
 
-	// TODO: Initialize an object store for models ion MVC structure of
-	// starshipyard
-	Store = make(map[datastore.DatastoreType]datastore.Datastore)
-	Store[KVStore] = datastore.OpenKVStore("db/kv.store")
 	//app.AppendToShutdownProcess(kv.Close)
 	// TODO:  Initialize a cache DB with TTL or something similar
 

@@ -5,3 +5,6 @@
 [submodule "framework/service/pid"]
 	path = framework/service/pid
   url = https://github.com/multiverse-os/pid
+[submodule "framework/datastore"]
+	path = framework/datastore
+	url = git://github.com/multiverse-os/datastore

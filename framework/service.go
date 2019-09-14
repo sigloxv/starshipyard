@@ -11,6 +11,7 @@ import (
 // TODO: SysV, SystemD and Upstart init script creation and installation for
 // intelligent and most importanlty secure defaults.
 func (self *Application) StartAsDaemon() { service.Daemonize(func() { self.Start() }) }
+
 func (self *Application) Start() {
 	fmt.Println("[starship] starting the web application http server")
 	self.Server[server.HTTP].Start()
@@ -25,9 +26,7 @@ func (self *Application) Stop() {
 	// NOTE: Could not work with stores so they will automatically be handled below
 	self.ShutdownFunctions()
 	self.Process.CleanPid()
-	for _, store := range self.Store {
-		store.Close()
-	}
+	self.Store.Close()
 	os.Exit(0)
 }
 
