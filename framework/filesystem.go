@@ -1,18 +1,8 @@
 package framework
 
 import (
-	"fmt"
-	"io/ioutil"
 	"strings"
-
-	color "github.com/multiverse-os/cli/text/ansi/color"
 )
-
-func InitializeFile(path, content string) error {
-	fmt.Println("  " + color.Green("CREATE") + " " + path)
-	contentBytes := []byte(content)
-	return ioutil.WriteFile(path, contentBytes, 0644)
-}
 
 func InitializeREADME(name string) string {
 	return `## ` + name + `
