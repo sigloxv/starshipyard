@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	color "github.com/multiverse-os/cli/framework/terminal/ansi/color"
+	color "github.com/multiverse-os/cli/ansi/color"
 )
 
 // NOTE: Provide functionality for printing to terminal, should not be a lot so

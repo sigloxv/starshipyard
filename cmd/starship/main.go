@@ -6,7 +6,6 @@ import (
 	"os"
 
 	cli "github.com/multiverse-os/cli"
-	color "github.com/multiverse-os/cli/framework/terminal/ansi/color"
 	framework "github.com/multiverse-os/starshipyard/framework"
 )
 
@@ -28,10 +27,12 @@ func main() {
 			},
 			cli.Flag{
 				Name:        "address, a",
+				Default:     "0.0.0.0",
 				Description: "Specify the address for the HTTP server to listen",
 			},
 			cli.Flag{
 				Name:        "port, p",
+				Default:     "3000",
 				Description: "Specify the listening port for the HTTP server",
 			},
 		},
@@ -51,6 +52,7 @@ func main() {
 							},
 						},
 						Action: func(c *cli.Context) error {
+							fmt.Println("Starting the starship yard http server...")
 							// TODO: Use flags to get port and host address and environment to
 							// start the server in or use envirnonemtnal variables. We take
 							// these and overwrite the values in the config object in this
@@ -64,7 +66,7 @@ func main() {
 								config = framework.DefaultConfig()
 							}
 							// TODO: Should validate address is sane
-							address := c.Flags["address"].String()
+							address := c.Flags["address"].Value
 							config.Address = address
 							port := c.Flags["port"].Int()
 							//if err != nil {
@@ -154,52 +156,52 @@ func main() {
 				Action: func(c *cli.Context) error {
 					fmt.Println("Building a new starship project directory:")
 
-					fmt.Println("  " + color.Green("CREATE") + " README.md")
-					fmt.Println("  " + color.Green("CREATE") + " Taskfile")
-					fmt.Println("  " + color.Green("CREATE") + " Dependencies")
-					fmt.Println("  " + color.Green("CREATE") + " app")
-					fmt.Println("  " + color.Green("CREATE") + " app/assets")
-					fmt.Println("  " + color.Green("CREATE") + " app/assets/stylesheets")
-					fmt.Println("  " + color.Green("CREATE") + " app/controllers")
-					fmt.Println("  " + color.Green("CREATE") + " app/models")
-					fmt.Println("  " + color.Green("CREATE") + " app/views")
-					fmt.Println("  " + color.Green("CREATE") + " bin")
-					fmt.Println("  " + color.Green("CREATE") + " bin/task")
-					fmt.Println("  " + color.Green("CREATE") + " bin/starship")
-					fmt.Println("  " + color.Green("CREATE") + " bin/dep")
-					fmt.Println("  " + color.Green("CREATE") + " config")
-					fmt.Println("  " + color.Green("CREATE") + " config/database.yml")
-					fmt.Println("  " + color.Green("CREATE") + " config/application.yml")
-					fmt.Println("  " + color.Green("CREATE") + " config/environments")
-					fmt.Println("  " + color.Green("CREATE") + " config/environments/development.yml")
-					fmt.Println("  " + color.Green("CREATE") + " config/environments/production.yml")
-					fmt.Println("  " + color.Green("CREATE") + " config/environments/test.yml")
-					fmt.Println("  " + color.Green("CREATE") + " config/initializers")
-					fmt.Println("  " + color.Green("CREATE") + " config/initializers/mime_types.go")
-					fmt.Println("  " + color.Green("CREATE") + " config/initializers/inflections.go")
-					fmt.Println("  " + color.Green("CREATE") + " config/initializers/cors.go")
-					fmt.Println("  " + color.Green("CREATE") + " config/initializers/cookie_serialization.go")
-					fmt.Println("  " + color.Green("CREATE") + " config/initializers/content_security_policy.go")
-					fmt.Println("  " + color.Green("CREATE") + " config/initializers/backtrace_silencers.go")
-					fmt.Println("  " + color.Green("CREATE") + " config/initializers/assets.go")
-					fmt.Println("  " + color.Green("CREATE") + " config/locales")
-					fmt.Println("  " + color.Green("CREATE") + " config/boot.go")
-					fmt.Println("  " + color.Green("CREATE") + " db")
-					fmt.Println("  " + color.Green("CREATE") + " db/seed.go")
-					fmt.Println("  " + color.Green("CREATE") + " log")
-					fmt.Println("  " + color.Green("CREATE") + " public")
-					fmt.Println("  " + color.Green("CREATE") + " public/404.html")
-					fmt.Println("  " + color.Green("CREATE") + " public/422.html")
-					fmt.Println("  " + color.Green("CREATE") + " public/500.html")
-					fmt.Println("  " + color.Green("CREATE") + " public/apple-touch-icon-precomposed.png")
-					fmt.Println("  " + color.Green("CREATE") + " public/apple-touch-icon.png")
-					fmt.Println("  " + color.Green("CREATE") + " public/favicon.ico")
-					fmt.Println("  " + color.Green("CREATE") + " tmp")
-					fmt.Println("  " + color.Green("CREATE") + " tmp/cache")
-					fmt.Println("  " + color.Green("CREATE") + " tmp/cache/assets")
-					fmt.Println("  " + color.Green("CREATE") + " test")
-					fmt.Println("  " + color.Green("CREATE") + " test/fixtures")
-					fmt.Println("  " + color.Green("CREATE") + " .gitignore")
+					fmt.Println("[CREATE] README.md")
+					fmt.Println("[CREATE] Taskfile")
+					fmt.Println("[CREATE] Dependencies")
+					fmt.Println("[CREATE] app")
+					fmt.Println("[CREATE] app/assets")
+					fmt.Println("[CREATE] app/assets/stylesheets")
+					fmt.Println("[CREATE] app/controllers")
+					fmt.Println("[CREATE] app/models")
+					fmt.Println("[CREATE] app/views")
+					fmt.Println("[CREATE] bin")
+					fmt.Println("[CREATE] bin/task")
+					fmt.Println("[CREATE] bin/starship")
+					fmt.Println("[CREATE] bin/dep")
+					fmt.Println("[CREATE] config")
+					fmt.Println("[CREATE] config/database.yml")
+					fmt.Println("[CREATE] config/application.yml")
+					fmt.Println("[CREATE] config/environments")
+					fmt.Println("[CREATE] config/environments/development.yml")
+					fmt.Println("[CREATE] config/environments/production.yml")
+					fmt.Println("[CREATE] config/environments/test.yml")
+					fmt.Println("[CREATE] config/initializers")
+					fmt.Println("[CREATE] config/initializers/mime_types.go")
+					fmt.Println("[CREATE] config/initializers/inflections.go")
+					fmt.Println("[CREATE] config/initializers/cors.go")
+					fmt.Println("[CREATE] config/initializers/cookie_serialization.go")
+					fmt.Println("[CREATE] config/initializers/content_security_policy.go")
+					fmt.Println("[CREATE] config/initializers/backtrace_silencers.go")
+					fmt.Println("[CREATE] config/initializers/assets.go")
+					fmt.Println("[CREATE] config/locales")
+					fmt.Println("[CREATE] config/boot.go")
+					fmt.Println("[CREATE] db")
+					fmt.Println("[CREATE] db/seed.go")
+					fmt.Println("[CREATE] log")
+					fmt.Println("[CREATE] public")
+					fmt.Println("[CREATE] public/404.html")
+					fmt.Println("[CREATE] public/422.html")
+					fmt.Println("[CREATE] public/500.html")
+					fmt.Println("[CREATE] public/apple-touch-icon-precomposed.png")
+					fmt.Println("[CREATE] public/apple-touch-icon.png")
+					fmt.Println("[CREATE] public/favicon.ico")
+					fmt.Println("[CREATE] tmp")
+					fmt.Println("[CREATE] tmp/cache")
+					fmt.Println("[CREATE] tmp/cache/assets")
+					fmt.Println("[CREATE] test")
+					fmt.Println("[CREATE] test/fixtures")
+					fmt.Println("[CREATE] .gitignore")
 
 					return nil
 				},
@@ -216,7 +218,7 @@ func main() {
 		},
 	})
 
-	_, err := cmd.Run(os.Args)
+	_, err := cmd.Parse(os.Args)
 	if err != nil {
 		log.Fatal(err)
 	}
