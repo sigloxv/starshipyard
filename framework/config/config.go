@@ -8,6 +8,20 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
+type Format uint8
+
+const (
+	YAML Format = iota
+	JSON
+	TOML
+	INI
+)
+
+type File struct {
+	Path   string
+	Format string
+}
+
 type Environment int
 
 const (
@@ -39,7 +53,7 @@ type Maintainance struct {
 // TODO: Address/Port should be handled in an nginx like configuration since
 // this application framework is meant to be able to handle reverse proxy,
 // multiple hosts/domains
-type Config struct {
+type Settings struct {
 	Environment      string       `yaml:"environment"`
 	Address          string       `yaml:"address"`
 	Port             int          `yaml:"port"`
@@ -48,7 +62,11 @@ type Config struct {
 	MaintainanceMode Maintainance `yaml:"maintainance"`
 }
 
-func LoadConfig(path string) (config *Config, err error) {
+// TODO: Add ability to update a setting. Write a default settings file.
+// TODO: Separate out application specific settings from config library logic so
+// we can re-use this code.
+
+func LoadConfig(path string) (config *Settings, err error) {
 	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
@@ -60,7 +78,7 @@ func LoadConfig(path string) (config *Config, err error) {
 	return config, nil
 }
 
-func (self *Config) Save(path string) error {
+func (self *Settings) Save(path string) error {
 	configPath, _ := filepath.Split(path)
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		return err
@@ -76,7 +94,7 @@ func (self *Config) Save(path string) error {
 // Initialize - First run config folder structure and file
 // initialization using default config, unless otherwise
 // specified using flags.
-func (self *Config) InitializeConfig(path string) error {
+func (self *Settings) InitializeDefault(path string) error {
 	configPath, _ := filepath.Split(path)
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		os.MkdirAll(configPath, 0700)

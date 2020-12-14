@@ -8,8 +8,8 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-func DefaultConfig() config.Config {
-	return config.Config{
+func DefaultConfig() config.Settings {
+	return config.Settings{
 		Address: "localhost",
 		Port:    3000,
 		Pid:     "tmp/pids/starship.pid",
@@ -21,7 +21,7 @@ func DefaultConfig() config.Config {
 	}
 }
 
-func LoadConfig(path string) (config config.Config, err error) {
+func LoadConfig(path string) (config config.Settings, err error) {
 	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {
 		return config, err
@@ -33,7 +33,7 @@ func LoadConfig(path string) (config config.Config, err error) {
 	return config, nil
 }
 
-func ValidateConfig(config config.Config) config.Config {
+func ValidateConfig(config config.Settings) config.Settings {
 	// TODO: Need more validations for all the individual fields
 	// TODO: Port needs to only support actual ports 1 - ~65000
 	if len(config.Pid) == 0 {

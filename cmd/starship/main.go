@@ -19,7 +19,7 @@ func main() {
 		Name:        "Starshipyard",
 		Version:     cli.Version{Major: 0, Minor: 1, Patch: 1},
 		Description: "A command-line tool for controling the starshipyard server, scaffolding boilerplate code, and executing developer defined commands",
-		Flags: []cli.Flag{
+		GlobalFlags: []cli.Flag{
 			cli.Flag{
 				Name:        "env, e",
 				Default:     "development",
@@ -66,9 +66,9 @@ func main() {
 								config = framework.DefaultConfig()
 							}
 							// TODO: Should validate address is sane
-							address := c.Flags["address"].Value
+							address := c.Flag("address").String()
 							config.Address = address
-							port := c.Flags["port"].Int()
+							port := c.Flag("port").Int()
 							//if err != nil {
 							//	fmt.Println("[error] failed to parse port value")
 							//	// TODO: Should validate for sane value, as in must be between
@@ -83,7 +83,7 @@ func main() {
 
 							s := framework.Init(config)
 
-							daemonize := c.Flags["daemonize"].Bool()
+							daemonize := c.Flag("daemonize").Bool()
 							if daemonize {
 								fmt.Println("[starship] launching in daemon mode...")
 								fmt.Println("[starship] not currently implemented, work on this functionality is in progress")

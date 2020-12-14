@@ -42,7 +42,7 @@ var (
 
 type Application struct {
 	ScrambleKey scramble.Key
-	Config      config.Config
+	Config      config.Settings
 	Process     *service.Process
 	Directories ApplicationDirectories
 	Shutdown    []func()
@@ -62,7 +62,7 @@ func DropPriviledges() {
 	}
 }
 
-func Init(config config.Config) *Application {
+func Init(config config.Settings) *Application {
 	DropPriviledges()
 	seedRandom()
 	// NOTE: This is bare minimum validation and default fallbacks so that errors
