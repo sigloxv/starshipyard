@@ -2,7 +2,7 @@
 ###############################################################################
 ## BUILD
 ###############################################################################
-TARGET="starship-yard"
+TARGET="starshipyard"
 DEV_BIN_PATH="./bin"
 GO_PATH="/home/$(USER)/go"
 GO_BUILD_FLAGS=""    
@@ -10,7 +10,7 @@ GO_BINARY="go"
 INSTALL_BIN_PATH="/usr/local/bin"
 ###############################################################################
 #PACKAGES="core database log parser"
-#PERMISSIONS="CAP_NET_BIND_SERVICE=+eip"
+PERMISSIONS="CAP_NET_BIND_SERVICE=+eip"
 ###############################################################################
 # NOTE [GO_BUILD_FLAGS] Variable
 # Obstuficate could be added here
