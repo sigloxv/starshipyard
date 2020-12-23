@@ -1,11 +1,11 @@
-[submodule "framework/service/signal"]
+[submodule "signal"]
 	path = framework/service/signal
-  url = https://github.com/multiverse-os/signal
+  url = git://github.com/multiverse-os/signal
 
-[submodule "framework/service/pid"]
+[submodule "pid"]
 	path = framework/service/pid
-  url = https://github.com/multiverse-os/pid
+  url = git://github.com/multiverse-os/pid
 
-[submodule "framework/datastore"]
+[submodule "datastore"]
 	path = framework/datastore
-	url = https://github.com/multiverse-os/datastore
+	url = git://github.com/multiverse-os/datastore
