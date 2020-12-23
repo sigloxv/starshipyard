@@ -57,43 +57,13 @@ func main() {
 						},
 						Action: func(c *cli.Context) error {
 							fmt.Println("Starting the starship yard http server...")
-							// TODO: Use flags to get port and host address and environment to
-							// start the server in or use envirnonemtnal variables. We take
-							// these and overwrite the values in the config object in this
-							// function
-
-							// TODO: These fmt should use the terminal file in framework
 							config, err := framework.LoadConfig("config/app.yaml")
 							if err != nil {
 								fmt.Println("[starship] missing 'config/app.yaml' starship app configuration")
-								// TODO: Should write this default config to config/app.yaml
 								config = framework.DefaultConfig()
 							}
-							// TODO: Should validate address is sane
-
-							for _, command := range c.CommandChain.Reversed() {
-								fmt.Println("=============================================")
-								fmt.Println("COMMAND:", command.Name)
-								for _, flag := range command.Flags {
-									fmt.Println("flag:", flag.Name, ", value:", flag.Value)
-								}
-							}
-							address := c.Flag("address").String()
-
-							fmt.Println("Address string flag worked !?!?:", address)
-							port := c.Flag("port").Int()
-							fmt.Println("PORT string flag worked !?!?:", port)
-							//if err != nil {
-							//	fmt.Println("[error] failed to parse port value")
-							//	// TODO: Should validate for sane value, as in must be between
-							//	// valid range of ports, for 80 and 443 will need to add
-							//	// capabilities to the binary or run as root and drop priviledges
-							//	// liked done by nginx
-							//	// TODO: This should go in a generic validations helper file
-							//	// that can be referenced all over. Even a latter ActiveRecord
-							//	// like validation on attributes
-							//}
-							config.Port = port
+							config.Address = c.Flag("address").String()
+							config.Port = c.Flag("port").Int()
 
 							s := framework.Init(config)
 
