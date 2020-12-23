@@ -21,17 +21,20 @@ func main() {
 		Description: "A command-line tool for controling the starshipyard server, scaffolding boilerplate code, and executing developer defined commands",
 		GlobalFlags: []cli.Flag{
 			cli.Flag{
-				Name:        "env, e",
+				Name:        "env",
+				Alias:       "e",
 				Default:     "development",
 				Description: "Specify the server environment",
 			},
 			cli.Flag{
-				Name:        "address, a",
+				Name:        "address",
+				Alias:       "a",
 				Default:     "0.0.0.0",
 				Description: "Specify the address for the HTTP server to listen",
 			},
 			cli.Flag{
-				Name:        "port, p",
+				Name:        "port",
+				Alias:       "p",
 				Default:     "3000",
 				Description: "Specify the listening port for the HTTP server",
 			},
@@ -47,7 +50,8 @@ func main() {
 						Description: "Start the starship yard http server",
 						Flags: []cli.Flag{
 							cli.Flag{
-								Name:        "daemonize, d",
+								Name:        "daemonize",
+								Alias:       "d",
 								Description: "Daemonize the http server",
 							},
 						},
@@ -66,9 +70,19 @@ func main() {
 								config = framework.DefaultConfig()
 							}
 							// TODO: Should validate address is sane
+
+							for _, command := range c.CommandChain.Reversed() {
+								fmt.Println("=============================================")
+								fmt.Println("COMMAND:", command.Name)
+								for _, flag := range command.Flags {
+									fmt.Println("flag:", flag.Name, ", value:", flag.Value)
+								}
+							}
 							address := c.Flag("address").String()
-							config.Address = address
+
+							fmt.Println("Address string flag worked !?!?:", address)
 							port := c.Flag("port").Int()
+							fmt.Println("PORT string flag worked !?!?:", port)
 							//if err != nil {
 							//	fmt.Println("[error] failed to parse port value")
 							//	// TODO: Should validate for sane value, as in must be between
