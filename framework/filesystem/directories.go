@@ -15,36 +15,36 @@ type ApplicationDirectories struct {
 	UserData   string
 }
 
-func (self *Application) ParseApplicationDirectories() {
+func (self ApplicationDirectories) ParseApplicationDirectories() {
 	var err error
-	if self.Directories.Working, err = os.Getwd(); err != nil {
+	if self.Working, err = os.Getwd(); err != nil {
 		panic(fmt.Sprintf("[fatal error] failed to determine working directory:", err))
 	}
-	self.Directories.Temporary = os.TempDir()
+	self.Temporary = os.TempDir()
 }
 
-func (self *Application) ParseUserDirectories() {
+func (self *ApplicationDirectories) ParseUserDirectories() {
 	var err error
-	self.Directories.UserHome = os.Getenv("HOME")
+	self.UserHome = os.Getenv("HOME")
 	// TODO: Why is this undefined?
 	// REF: https://golang.org/src/os/file.go
 	//self.UserHomeDirectory, err = os.UserHomeDir()
 	//if err != nil {
 	//	panic(fmt.Sprintf("[fatal error] failed to determine user home:", err))
 	//}
-	if self.Directories.UserCache, err = os.UserCacheDir(); err != nil {
+	if self.UserCache, err = os.UserCacheDir(); err != nil {
 		panic(fmt.Sprintf("[fatal error] failed to determine user cache:", err))
 	}
-	if self.Directories.UserConfig = self.Directories.UserHome + "/.config/starship"; err != nil {
+	if self.UserConfig = self.UserHome + "/.config/starship"; err != nil {
 		panic(fmt.Sprintf("[fatal error] failed to determine user config path:", err))
 	}
-	if _, err := os.Stat(self.Directories.UserConfig); os.IsNotExist(err) {
-		os.Mkdir(self.Directories.UserConfig, 0770)
+	if _, err := os.Stat(self.UserConfig); os.IsNotExist(err) {
+		os.Mkdir(self.UserConfig, 0770)
 	}
-	if self.Directories.UserData = self.Directories.UserHome + "/.local/share/starship/"; err != nil {
+	if self.UserData = self.UserHome + "/.local/share/starship/"; err != nil {
 		panic(fmt.Sprintf("[fatal error] failed to determine user data path:", err))
 	}
-	if _, err := os.Stat(self.Directories.UserData); os.IsNotExist(err) {
-		os.Mkdir(self.Directories.UserData, 0770)
+	if _, err := os.Stat(self.UserData); os.IsNotExist(err) {
+		os.Mkdir(self.UserData, 0770)
 	}
 }

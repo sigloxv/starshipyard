@@ -9,6 +9,7 @@ import (
 
 	config "github.com/multiverse-os/starshipyard/framework/config"
 	datastore "github.com/multiverse-os/starshipyard/framework/datastore"
+	filesystem "github.com/multiverse-os/starshipyard/framework/filesystem"
 	server "github.com/multiverse-os/starshipyard/framework/server"
 	service "github.com/multiverse-os/starshipyard/framework/service"
 
@@ -44,7 +45,7 @@ type Application struct {
 	ScrambleKey scramble.Key
 	Config      config.Settings
 	Process     *service.Process
-	Directories ApplicationDirectories
+	Directories filesystem.ApplicationDirectories
 	Shutdown    []func()
 	Store       datastore.KV // NOTE: Just store, but will make more sense when calling something from the map
 	Server      map[server.ServerType]server.Server

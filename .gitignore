@@ -24,3 +24,52 @@ db/*.db
 # Text Editing Artificats
 *.swp
 *.swo
+
+################################################################################
+## Starshipyard                                                               ##
+################################################################################
+# Ignore all the local MVC files, so that development of the framework can  
+# continue on projects using the framework, using a differnet structure than 
+# rails uses (creation of a project); in favor of project exists in root folder
+# and the framework folder contains logic that is used across all projects. OR 
+# at least is a wide range of features usable for a wide range of projects 
+#
+################################################################################
+## MVC 
+#### Models 
+models/*.go
+models/**
+models/**/ 
+
+#### Controllers
+controllers/*.go
+controllers/**/
+controllers/**
+
+#### Views 
+views/*.go 
+
+
+################################################################################
+## Other Project Files
+#### Temporary
+tmp/* 
+
+#### Localisation
+locales/*.yaml 
+locales/*.go 
+
+#### Config Files
+config/*.yaml
+
+#### Jobs 
+jobs/*.go 
+
+#### Helpers
+helpers/*.go
+
+### Routes 
+# TODO: Will need to migrate project routes into the root folder, and migrate 
+#       the rest of the code into the framework folder. 
+
+
