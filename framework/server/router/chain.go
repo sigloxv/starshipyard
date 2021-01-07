@@ -1,40 +1,41 @@
 package router
 
-import "net/http"
+import (
+	"net/http"
+)
 
-// Chain returns a Middlewares type from a slice of middleware handlers.
+type ChainHandler struct {
+	Middlewares Middlewares
+	Endpoint    http.Handler
+	// Private
+	chain http.Handler
+}
+
 func Chain(middlewares ...func(http.Handler) http.Handler) Middlewares {
 	return Middlewares(middlewares)
 }
 
-// Handler builds and returns a http.Handler from the chain of middlewares,
-// with `h http.Handler` as the final handler.
-func (mws Middlewares) Handler(h http.Handler) http.Handler {
-	return &ChainHandler{mws, h, chain(mws, h)}
+func (self Middlewares) Handler(h http.Handler) http.Handler {
+	return &ChainHandler{
+		Middlewares: self,
+		Endpoint:    h,
+		chain:       chain(self, h),
+	}
 }
 
-// HandlerFunc builds and returns a http.Handler from the chain of middlewares,
-// with `h http.Handler` as the final handler.
-func (mws Middlewares) HandlerFunc(h http.HandlerFunc) http.Handler {
-	return &ChainHandler{mws, h, chain(mws, h)}
+func (self Middlewares) HandlerFunc(h http.HandlerFunc) http.Handler {
+	return &ChainHandler{
+		Middlewares: self,
+		Endpoint:    h,
+		chain:       chain(self, h),
+	}
 }
 
-// ChainHandler is a http.Handler with support for handler composition and
-// execution.
-type ChainHandler struct {
-	Middlewares Middlewares
-	Endpoint    http.Handler
-	chain       http.Handler
+func (self *ChainHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	self.chain.ServeHTTP(w, r)
 }
 
-func (c *ChainHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c.chain.ServeHTTP(w, r)
-}
-
-// chain builds a http.Handler composed of an inline middleware stack and endpoint
-// handler in the order they are passed.
 func chain(middlewares []func(http.Handler) http.Handler, endpoint http.Handler) http.Handler {
-	// Return ahead of time if there aren't any middlewares for the chain
 	if len(middlewares) == 0 {
 		return endpoint
 	}
