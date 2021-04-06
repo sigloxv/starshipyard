@@ -6,6 +6,15 @@
 	path = framework/service/pid
   url = https://github.com/multiverse-os/pid
 
-[submodule "datastore"]
-	path = framework/datastore
-	url = https://github.com/multiverse-os/datastore
+[submodule "muid"]
+	path = framework/datastore/id
+  url = https://github.com/multiverse-os/muid
+
+[submodule "levelup"]
+	path = framework/datastore/leveldb
+  url = https://github.com/multiverse-os/levelup
+
+[submodule "codec"]
+  path = framework/datastore/codec
+  url = https://github.com/multiverse-os/codec
+
