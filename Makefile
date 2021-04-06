@@ -101,6 +101,16 @@ clean:
 		#@rm "$(INSTALL_BIN_PATH)/*" 
 		@echo "Cleanup successfull, all artificates removed."
 
+install-dependencies:
+		@echo ".================================================."
+		@echo "|Installing Starship Yard Framework Dependencies |"
+		@echo "'================================================"
+
+uninstall-dependencies:
+		@echo ".==================================================."
+		@echo "|Uninstalling Starship Yard Framework Dependencies |"
+		@echo "'=================================================="
+
 install:
 		@echo ".===================================."
 		@echo "|Installing Starship Yard Framework |"

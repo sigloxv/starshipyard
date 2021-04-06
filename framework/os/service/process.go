@@ -6,8 +6,8 @@ import (
 	"syscall"
 	"time"
 
-	pid "github.com/multiverse-os/starshipyard/framework/service/pid"
-	signal "github.com/multiverse-os/starshipyard/framework/service/signal"
+	pid "github.com/multiverse-os/starshipyard/framework/os/service/pid"
+	signal "github.com/multiverse-os/starshipyard/framework/os/service/signal"
 )
 
 // TODO: May want to add a weight concept so that certain functions will be

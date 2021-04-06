@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	service "github.com/multiverse-os/starshipyard/framework/os/service"
 	server "github.com/multiverse-os/starshipyard/framework/server"
-	service "github.com/multiverse-os/starshipyard/framework/service"
 )
 
 // TODO: SysV, SystemD and Upstart init script creation and installation for

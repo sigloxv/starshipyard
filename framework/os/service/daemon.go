@@ -1,7 +1,7 @@
 package service
 
 import (
-	daemon "github.com/multiverse-os/starshipyard/framework/service/daemon"
+	daemon "github.com/multiverse-os/starshipyard/framework/os/service/daemon"
 )
 
 // TODO: Abstract the logic from each of the dependency free subpackages so that

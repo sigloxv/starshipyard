@@ -9,9 +9,8 @@ import (
 
 	config "github.com/multiverse-os/starshipyard/framework/config"
 	datastore "github.com/multiverse-os/starshipyard/framework/datastore"
-	filesystem "github.com/multiverse-os/starshipyard/framework/filesystem"
+	service "github.com/multiverse-os/starshipyard/framework/os/service"
 	server "github.com/multiverse-os/starshipyard/framework/server"
-	service "github.com/multiverse-os/starshipyard/framework/service"
 
 	scramble "github.com/multiverse-os/scramble-key"
 )
