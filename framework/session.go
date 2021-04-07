@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	sessions "github.com/multiverse-os/starshipyard/framework/sessions"
+	session "github.com/multiverse-os/starshipyard/framework/session"
 )
 
 func (self *Application) NewSession(w http.ResponseWriter, expireAt time.Time) string {
@@ -13,9 +13,13 @@ func (self *Application) NewSession(w http.ResponseWriter, expireAt time.Time) s
 	// which is why we use it in addition to our scramblekeys
 	fmt.Println("[starship] creating a new session")
 
-	session := sessions.New(expireAt)
+	session := session.New(expireAt)
 
-	cookie := http.Cookie{Name: "sid", Value: session.Id, Expires: expireAt}
+	cookie := http.Cookie{
+		Name:    "sid",
+		Value:   session.Id.String(),
+		Expires: expireAt,
+	}
 	http.SetCookie(w, &cookie)
 	return ""
 }
@@ -29,10 +33,10 @@ func NewRegisteredSession(sid, uid, password string) string {
 	fmt.Println("A user is attempting to login with: ")
 	fmt.Println("  UID     : ", uid)
 	fmt.Println("  PASSWORD: ", password)
-	//user, err := .sessions.Collections["sessions"].Get(uid)
+	//user, err := .session.Collections["session"].Get(uid)
 	//TODO: Take database data and convert to user
 	//if err != nil {
-	//	session := self.Sessions[sid]
+	//	session := self.Session[sid]
 	//	if session.FailedLoginAttempts >= 6 {
 	//		fmt.Println("session has failed too many login attempts, should just block it for x amount of time")
 	//	} else {

@@ -28,7 +28,9 @@ func NewRouteContext() *Context { return &Context{} }
 
 func (self *Context) Reset() {
 	self.Routes = nil
-	self.RoutePath, self.RouteMethod, self.routePattern = ""
+	self.RoutePath = ""
+	self.RouteMethod = ""
+	self.routePattern = ""
 	self.RoutePatterns = self.RoutePatterns[:0]
 	self.URLParams.Keys = self.URLParams.Keys[:0]
 	self.URLParams.Values = self.URLParams.Values[:0]

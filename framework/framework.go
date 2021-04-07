@@ -9,7 +9,9 @@ import (
 
 	config "github.com/multiverse-os/starshipyard/framework/config"
 	datastore "github.com/multiverse-os/starshipyard/framework/datastore"
+	filesystem "github.com/multiverse-os/starshipyard/framework/os/filesystem"
 	service "github.com/multiverse-os/starshipyard/framework/os/service"
+	"github.com/multiverse-os/starshipyard/framework/os/service/signal"
 	server "github.com/multiverse-os/starshipyard/framework/server"
 
 	scramble "github.com/multiverse-os/scramble-key"
@@ -46,7 +48,7 @@ type Application struct {
 	Process     *service.Process
 	Directories filesystem.ApplicationDirectories
 	Shutdown    []func()
-	Store       datastore.KV // NOTE: Just store, but will make more sense when calling something from the map
+	Store       *datastore.KV // NOTE: Just store, but will make more sense when calling something from the map
 	Server      map[server.ServerType]server.Server
 }
 
@@ -91,11 +93,13 @@ func Init(config config.Settings) *Application {
 	}
 	// Process Information Parsing and Long running Linux service initialization
 	/////////////////////////////////////////////////////////////////////r///////
-	app.Process.Signals = service.OnShutdownSignals(func(s os.Signal) {
-		if s.String() == "interrupt" {
+	app.Process.Signals = service.OnShutdownSignals(func(shutdownSignal os.Signal) {
+		// TODO: No string comparisons, or at least first start with length compare
+		switch shutdownSignal {
+		case signal.Interrupt:
 			fmt.Printf("\n")
 		}
-		fmt.Println("[starship] received exit signal:", s)
+		fmt.Println("[starship] received exit signal:", shutdownSignal)
 		app.Stop()
 	})
 	app.Process.WritePid(app.Config.Pid)

@@ -1,35 +1,46 @@
-package framework
+package filesystem
 
 import (
-	"fmt"
-	"io"
+	"context"
+	"errors"
 	"os"
-
-	"golang.org/x/sys/unix"
+	"syscall"
 )
 
-func lockFcntl(name string) (io.Closer, error) {
-	fi, err := os.Stat(name)
-	if err == nil && fi.Size() > 0 {
-		return nil, fmt.Errorf("can't Lock file %q: has non-zero size", name)
-	}
+var (
+	ErrIsLocked = errors.New("file is already locked")
+	ErrTimeout  = errors.New("timeout exceeded when acquiring lock")
+)
 
-	f, err := os.Create(name)
-	if err != nil {
-		return nil, fmt.Errorf("Lock Create of %s failed: %v", name, err)
-	}
+func Lock(file *os.File) error {
+	return syscall.Flock(int(file.Fd()), syscall.LOCK_EX)
+}
 
-	err = unix.FcntlFlock(f.Fd(), unix.F_SETLK, &unix.Flock_t{
-		Type:   unix.F_WRLCK,
-		Whence: int16(os.SEEK_SET),
-		Start:  0,
-		Len:    0, // 0 means to lock the entire file.
-		Pid:    0, // only used by F_GETLK
-	})
-
-	if err != nil {
-		f.Close()
-		return nil, fmt.Errorf("Lock FcntlFlock of %s failed: %v", name, err)
+func TryLock(f *os.File) error {
+	err := syscall.Flock(int(f.Fd()), syscall.LOCK_EX|syscall.LOCK_NB)
+	switch err {
+	case syscall.EWOULDBLOCK:
+		return ErrIsLocked
+	default:
+		return err
 	}
-	return &unlocker{f: f, abs: name}, nil
+}
+
+func LockWithContext(ctx context.Context, file *os.File) error {
+	result := make(chan error)
+	go func() {
+		result <- Lock(file)
+	}()
+
+	select {
+	case err := <-result:
+		return err
+	case <-ctx.Done():
+		go Unlock(file)
+		return ErrTimeout
+	}
+}
+
+func Unlock(file *os.File) error {
+	return syscall.Flock(int(file.Fd()), syscall.LOCK_UN)
 }

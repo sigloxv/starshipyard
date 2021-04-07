@@ -1,4 +1,4 @@
-package defaultpaths
+package path
 
 import (
 	"os"
