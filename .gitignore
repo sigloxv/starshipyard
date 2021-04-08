@@ -37,36 +37,31 @@ db/*.db
 ################################################################################
 ## MVC 
 #### Models 
-models/*.go
-models/**
-models/**/ 
+app/models/**/*.go
 
 #### Controllers
-controllers/*.go
-controllers/**/
-controllers/**
+app/controllers/**/*.go
 
 #### Views 
-views/*.go 
+app/views/**/*.go 
+
+#### Locales
+app/locales/**/*.yaml 
+app/locales/**/*.go 
+
+#### Jobs 
+app/jobs/**/*.go 
+
+#### Helpers
+app/helpers/**/*.go
 
 
 ################################################################################
 ## Other Project Files
 #### Temporary
 tmp/* 
-
-#### Localisation
-locales/*.yaml 
-locales/*.go 
-
 #### Config Files
 config/*.yaml
-
-#### Jobs 
-jobs/*.go 
-
-#### Helpers
-helpers/*.go
 
 ### Routes 
 # TODO: Will need to migrate project routes into the root folder, and migrate 

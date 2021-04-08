@@ -84,6 +84,11 @@ func Init(config config.Settings) *Application {
 		panic(errors.New("[error] failed to open leveldb datastore:" + err.Error()))
 	}
 
+	// TODO: Load Session Store
+	// TODO: Load Scramble Key from config folder or generate a new one if there
+	// is none. This will be used in our session encryption, and various other
+	// aspects of the design.
+
 	app := &Application{
 		ScrambleKey: scramble.GenerateKey(),
 		Config:      config,
