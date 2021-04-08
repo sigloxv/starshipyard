@@ -3,15 +3,13 @@ package framework
 import (
 	"errors"
 	"fmt"
-	"math/rand"
 	"os"
-	"time"
 
 	config "github.com/multiverse-os/starshipyard/framework/config"
 	datastore "github.com/multiverse-os/starshipyard/framework/datastore"
 	filesystem "github.com/multiverse-os/starshipyard/framework/os/filesystem"
 	service "github.com/multiverse-os/starshipyard/framework/os/service"
-	"github.com/multiverse-os/starshipyard/framework/os/service/signal"
+	signal "github.com/multiverse-os/starshipyard/framework/os/service/signal"
 	server "github.com/multiverse-os/starshipyard/framework/server"
 
 	scramble "github.com/multiverse-os/scramble-key"
@@ -42,18 +40,27 @@ var (
 
 //var Store datastore.KV // NOTE: Just store, but will make more sense when calling something from the map
 
+// TODO: Migrate to a generic key, then allow that key to derive other keys.
+//       such as scramble key generating PGP keys, SSH keys, ECDSA keys, etc.
+
+// NOTE: Just store, but will make more sense when calling something from the
+//       map. Store should include several databases, a write database, and
+//       read only read databases that are abstracted and stored in the local
+//       application.
+
+// TODO: Don't use []func() and instead use Shutdown specific actions or action
+//       to control the input and output
+
+// TODO: Application should be a process manager, launch child processes, etc.
+//       this would allow rolling updates/restart.
 type Application struct {
 	ScrambleKey scramble.Key
 	Config      config.Settings
 	Process     *service.Process
 	Directories filesystem.ApplicationDirectories
 	Shutdown    []func()
-	Store       *datastore.KV // NOTE: Just store, but will make more sense when calling something from the map
+	Store       *datastore.KV
 	Server      map[server.ServerType]server.Server
-}
-
-func seedRandom() {
-	rand.Seed(time.Now().UTC().UnixNano())
 }
 
 func DropPriviledges() {
